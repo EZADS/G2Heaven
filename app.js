@@ -1032,57 +1032,62 @@ function downloadItineraryPDF() {
   const arrivalText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "Destination";
   const vesselText = vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "Transport Mode";
   const packageDays = pkgSelect ? pkgSelect.value : currentExpedition.days.length;
-  const paxCount = paxSelect ? paxSelect.value : 1;
+  const paxCount = paxSelect ? paxSelect.value : selectedPaxCount;
   const travelDate = dateInput ? dateInput.value : "2026-11-01";
 
-  // Create temporary container for clean PDF rendering
+  // Create clean printable container for PDF generation
   const pdfContainer = document.createElement("div");
-  pdfContainer.style.padding = "25px";
+  pdfContainer.id = "pdf-export-container";
+  pdfContainer.style.padding = "30px";
   pdfContainer.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
-  pdfContainer.style.color = "#05070f";
+  pdfContainer.style.color = "#0f172a";
   pdfContainer.style.background = "#ffffff";
+  pdfContainer.style.width = "750px";
+  pdfContainer.style.margin = "0 auto";
 
   let daysHtml = currentExpedition.days.map((d) => `
-    <div style="margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;">
-      <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; color: #0284c7; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px;">
-        <span>DAY ${d.day}</span>
-        <span style="color: #475569; font-weight: normal; font-size: 13px;">📍 ${d.location}</span>
+    <div style="margin-bottom: 22px; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff; page-break-inside: avoid;">
+      <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; color: #ffffff; padding: 10px 16px; font-weight: bold; font-size: 14px;">
+        <span style="color: #38bdf8;">DAY ${d.day}</span>
+        <span style="font-weight: 500; font-size: 13px; color: #94a3b8;">📍 ${d.location}</span>
       </div>
-      ${d.activities.map(a => `
-        <div style="margin-left: 10px; margin-bottom: 8px;">
-          <div style="font-weight: 600; font-size: 13px; color: #0f172a;">• ${a.title}</div>
-          <div style="font-size: 12px; color: #64748b; margin-left: 12px;">${a.desc}</div>
-        </div>
-      `).join('')}
+      <div style="padding: 14px 16px;">
+        ${d.activities.map(a => `
+          <div style="margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #e2e8f0;">
+            <div style="font-weight: 700; font-size: 13px; color: #0284c7; margin-bottom: 3px;">• ${a.title}</div>
+            <div style="font-size: 12px; color: #475569; line-height: 1.5; margin-left: 12px;">${a.desc}</div>
+          </div>
+        `).join('')}
+      </div>
     </div>
   `).join('');
 
   pdfContainer.innerHTML = `
-    <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px;">
-      <div style="font-size: 12px; font-weight: bold; color: #0284c7; letter-spacing: 2px; text-transform: lowercase;">astranav</div>
-      <h1 style="font-size: 26px; margin: 0; color: #0f172a; font-family: sans-serif;">Beyond-Universe</h1>
-      <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Official Master Expedition Itinerary Document</p>
+    <div style="text-align: center; border-bottom: 3px solid #0284c7; padding-bottom: 18px; margin-bottom: 22px;">
+      <div style="font-size: 11px; font-weight: 800; color: #0284c7; letter-spacing: 3px; text-transform: lowercase; margin-bottom: 2px;">astranav</div>
+      <h1 style="font-size: 28px; margin: 0; color: #0f172a; font-family: sans-serif; font-weight: 800;">Beyond-Universe</h1>
+      <p style="font-size: 13px; color: #64748b; margin-top: 4px; font-weight: 600;">CONFIRMED EXPEDITION ITINERARY DETAILS</p>
     </div>
 
-    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
-      <div><strong>Expedition Title:</strong> ${currentExpedition.title}</div>
-      <div><strong>Travel Date:</strong> ${travelDate}</div>
-      <div><strong>Departure Source:</strong> ${departureText}</div>
-      <div><strong>Arriving Destination:</strong> ${arrivalText}</div>
-      <div><strong>Transport Mode:</strong> ${vesselText}</div>
-      <div><strong>Package Duration:</strong> ${packageDays} Days</div>
-      <div><strong>Number of PAX:</strong> ${paxCount} Traveler(s)</div>
-      <div><strong>Gravity Profile:</strong> ${currentExpedition.gravity || '1.00 g'}</div>
+    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 18px; margin-bottom: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+      <div><strong style="color: #0284c7;">EXPEDITION TITLE:</strong> <br><span style="font-size: 14px; font-weight: 700; color: #0f172a;">${currentExpedition.title}</span></div>
+      <div><strong style="color: #0284c7;">TRAVEL DATE:</strong> <br><span style="font-size: 14px; font-weight: 700; color: #0f172a;">${travelDate}</span></div>
+      <div><strong style="color: #0284c7;">SOURCE / DEPARTURE:</strong> <br><span style="font-size: 13px; color: #334155;">${departureText}</span></div>
+      <div><strong style="color: #0284c7;">DESTINATION / ARRIVAL:</strong> <br><span style="font-size: 13px; color: #334155;">${arrivalText}</span></div>
+      <div><strong style="color: #0284c7;">TRANSPORT MODE:</strong> <br><span style="font-size: 13px; color: #334155;">${vesselText}</span></div>
+      <div><strong style="color: #0284c7;">PACKAGE DURATION:</strong> <br><span style="font-size: 13px; color: #334155;">${packageDays} Days</span></div>
+      <div><strong style="color: #0284c7;">NUMBER OF PAX:</strong> <br><span style="font-size: 13px; color: #334155;">${paxCount} Passenger(s)</span></div>
+      <div><strong style="color: #0284c7;">GRAVITY PROFILE:</strong> <br><span style="font-size: 13px; color: #334155;">${currentExpedition.gravity || '1.00 g'}</span></div>
     </div>
 
-    <h2 style="font-size: 18px; color: #0f172a; margin-bottom: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px;">
-      Day-by-Day Itinerary Timeline
+    <h2 style="font-size: 18px; color: #0f172a; margin-bottom: 16px; border-bottom: 2px solid #0284c7; padding-bottom: 6px; font-weight: 800;">
+      DAY-BY-DAY ITINERARY DETAILS
     </h2>
 
     ${daysHtml}
 
-    <div style="text-align: center; margin-top: 30px; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px;">
-      Generated by astranav Beyond-Universe • Powered by n8n Webhook Engine • &copy; 2026
+    <div style="text-align: center; margin-top: 35px; font-size: 11px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+      Official Document generated by astranav Beyond-Universe • Connected to n8n Webhook Engine • &copy; 2026
     </div>
   `;
 
@@ -1091,9 +1096,9 @@ function downloadItineraryPDF() {
   if (window.html2pdf) {
     const opt = {
       margin:       [10, 10, 10, 10],
-      filename:     `astranav-beyond-universe-itinerary.pdf`,
+      filename:     `astranav-beyond-universe-itinerary-details.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
@@ -1106,4 +1111,5 @@ function downloadItineraryPDF() {
     window.print();
   }
 }
+
 
