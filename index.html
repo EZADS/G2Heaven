@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="styles.css">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- html2pdf.js for PDF Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -23,7 +25,7 @@
         <span class="logo-prefix">astranav</span>
         <div class="logo-text">Beyond-Universe</div>
       </div>
-      <span class="logo-badge">v6.0 Portal</span>
+      <span class="logo-badge">v6.2 PDF Engine</span>
     </div>
     
     <ul class="nav-menu">
@@ -157,15 +159,20 @@
           <h2 class="section-title">Interactive Expedition Workspace</h2>
           <p class="section-subtitle">Dynamically generated day-by-day itinerary timeline populated from Webhook responses.</p>
         </div>
-        <button class="btn-primary" onclick="resetToPreset('elon-moon')">
-          <i data-lucide="rotate-ccw"></i> Load Featured Preset
-        </button>
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;">
+          <button class="btn-audio" onclick="downloadItineraryPDF()" style="background: rgba(0, 240, 255, 0.12); border-color: var(--primary-cyan); color: var(--primary-cyan); font-weight: 700;">
+            <i data-lucide="download"></i> Download Itinerary PDF
+          </button>
+          <button class="btn-primary" onclick="resetToPreset('elon-moon')">
+            <i data-lucide="rotate-ccw"></i> Load Preset
+          </button>
+        </div>
       </div>
 
       <div class="planner-workspace">
         
         <!-- Left: Interactive Timeline -->
-        <div class="planner-main">
+        <div class="planner-main" id="planner-printable-area">
           <div class="planner-header">
             <div class="trip-meta">
               <i data-lucide="edit-3" style="color: var(--primary-cyan)"></i>
@@ -307,7 +314,7 @@
         <div class="ticket-stub">
           <div class="qr-code-placeholder">
             <svg viewBox="0 0 100 100" width="100" height="100">
-              <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v10 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
+              <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v20 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
             </svg>
           </div>
           <span class="ticket-seq" id="modal-pass-id">PASS #AST-9021-CELESTIAL</span>
