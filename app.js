@@ -1,7 +1,7 @@
 /* ASTRANAV - Interplanetary & Terrestrial Itinerary Engine Logic */
 
 // --- Backend Configured Webhook URL ---
-const WEBHOOK_URL = "https://hook.us1.make.com/astranav-travel-itinerary";
+const WEBHOOK_URL = "https://rams1942.app.n8n.cloud/webhook/travel-itinerary";
 
 // --- Category Datasets for Dynamic Dropdowns ---
 const CATEGORY_DROPDOWN_DATA = {
