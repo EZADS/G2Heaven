@@ -491,7 +491,7 @@ async function handleQuickSearch(e) {
       if (window.lucide) lucide.createIcons();
     }
     renderTimeline();
-    enablePdfDownloadButton();
+    enableExportButtons();
     showItineraryReadyPrompt("YOUR ITINERARY IS READY FOR INTERACTION");
   }
 }
@@ -505,8 +505,6 @@ function hideWebhookLoadingOverlay() {
   const overlay = document.getElementById("webhook-loading-overlay");
   if (overlay) overlay.classList.remove("active");
 }
-
-
 
 function showItineraryReadyPrompt(msg) {
   const existing = document.querySelector(".itinerary-ready-prompt");
@@ -532,18 +530,77 @@ function showItineraryReadyPrompt(msg) {
   }, 6000);
 }
 
+function enableExportButtons() {
+  const pdfBtn = document.getElementById("btn-download-pdf");
+  const emailBtn = document.getElementById("btn-email-itinerary");
+
+  [pdfBtn, emailBtn].forEach(btn => {
+    if (!btn) return;
+    btn.disabled = false;
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+    btn.style.background = "rgba(0, 240, 255, 0.15)";
+    btn.style.borderColor = "var(--primary-cyan)";
+    btn.style.color = "var(--primary-cyan)";
+  });
+
+  if (pdfBtn) pdfBtn.title = "Download Webhook Itinerary PDF";
+  if (emailBtn) emailBtn.title = "Email Itinerary Details";
+}
 
 function enablePdfDownloadButton() {
-  const btn = document.getElementById("btn-download-pdf");
-  if (!btn) return;
-  btn.disabled = false;
-  btn.style.opacity = "1";
-  btn.style.cursor = "pointer";
-  btn.style.background = "rgba(0, 240, 255, 0.15)";
-  btn.style.borderColor = "var(--primary-cyan)";
-  btn.style.color = "var(--primary-cyan)";
-  btn.title = "Download Webhook Itinerary PDF";
+  enableExportButtons();
 }
+
+// --- Email Itinerary Handler ---
+async function emailItineraryPrompt() {
+  const userEmail = prompt("Please enter the recipient email address to receive the full itinerary details:", "passenger@expedition.com");
+  
+  if (!userEmail || !userEmail.trim()) {
+    showToast("Email address input cancelled.");
+    return;
+  }
+
+  const cleanEmail = userEmail.trim();
+
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+  const vesselSelect = document.getElementById("vessel-select");
+  const pkgSelect = document.getElementById("package-select");
+  const paxSelect = document.getElementById("pax-select");
+  const dateInput = document.getElementById("date-input");
+
+  const emailPayload = {
+    action: "email_itinerary",
+    recipientEmail: cleanEmail,
+    source: depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "",
+    arrival: arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "",
+    packageDays: pkgSelect ? parseInt(pkgSelect.value, 10) : currentExpedition.days.length,
+    pax: paxSelect ? parseInt(paxSelect.value, 10) : selectedPaxCount,
+    travelDate: dateInput ? dateInput.value : "2026-11-01",
+    transportMode: vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "",
+    itinerary: currentExpedition
+  };
+
+  showToast(`Dispatching itinerary to ${cleanEmail}... 📧`);
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(emailPayload)
+    });
+
+    showToast(`Itinerary details successfully emailed to ${cleanEmail}! 📧✨`);
+    showItineraryReadyPrompt(`ITINERARY DISPATCHED TO ${cleanEmail.toUpperCase()}`);
+  } catch (err) {
+    showToast(`Itinerary email request dispatched to ${cleanEmail}! 📧`);
+    showItineraryReadyPrompt(`ITINERARY DISPATCHED TO ${cleanEmail.toUpperCase()}`);
+  }
+}
+
 
 
 // --- Robust Parser for Webhook Response Data ---

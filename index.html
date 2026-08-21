@@ -160,6 +160,9 @@
           <p class="section-subtitle">Dynamically generated day-by-day itinerary timeline populated from Webhook responses.</p>
         </div>
         <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;">
+          <button class="btn-audio" id="btn-email-itinerary" onclick="emailItineraryPrompt()" disabled style="opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.05); border-color: var(--glass-border); color: var(--text-muted); font-weight: 700;" title="Click 'Filter & Launch' first to enable emailing itinerary">
+            <i data-lucide="mail"></i> Email the Itinerary
+          </button>
           <button class="btn-audio" id="btn-download-pdf" onclick="downloadItineraryPDF()" disabled style="opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.05); border-color: var(--glass-border); color: var(--text-muted); font-weight: 700;" title="Click 'Filter & Launch' first to enable PDF download">
             <i data-lucide="download"></i> Download Itinerary PDF
           </button>
@@ -167,6 +170,7 @@
             <i data-lucide="rotate-ccw"></i> Load Preset
           </button>
         </div>
+
       </div>
 
 
