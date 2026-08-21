@@ -91,6 +91,11 @@ const TRANSPORT_MODES_DATA = {
   ]
 };
 
+// --- Package Days Options (1 to 100 Days) ---
+const PACKAGE_DAY_OPTIONS = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 18, 20, 21, 25, 30, 45, 60, 90, 100
+];
+
 // --- Expeditions Database ---
 const EXPEDITIONS = [
   {
@@ -101,7 +106,7 @@ const EXPEDITIONS = [
     category: "beyond-earth",
     image: "assets/hero_earth_to_moon.jpg",
     description: "The ultimate Moon itinerary: launch aboard SpaceX Starship Super Heavy, dock at Artemis Gateway, and stay at Luna City Grand Suite.",
-    duration: "7 Days / 6 Nights",
+    duration: "7 Days",
     gravity: "0.16 g (Moon)",
     price: "⚡ 480,000 Credits",
     days: [
@@ -169,7 +174,7 @@ const EXPEDITIONS = [
     category: "beyond-earth",
     image: "assets/mars_resort.jpg",
     description: "Expedition across Martian canyons, staying in glowing glass biomes under the stars of Olympus Mons.",
-    duration: "14 Days / 13 Nights",
+    duration: "14 Days",
     gravity: "0.38 g (Mars)",
     price: "⚡ 1,200,000 Credits",
     days: [
@@ -198,7 +203,7 @@ const EXPEDITIONS = [
     category: "earth-luxury",
     image: "assets/lunar_hotel.jpg",
     description: "Private supersonic transfer between Kyoto bamboo Ryokan retreats and 5-star Swiss Alpine heli-skiing chalets.",
-    duration: "6 Days / 5 Nights",
+    duration: "6 Days",
     gravity: "1.00 g (Earth)",
     price: "⚡ 95,000 Credits",
     days: [
@@ -227,7 +232,7 @@ const EXPEDITIONS = [
     category: "earth-adventure",
     image: "assets/hero_earth_to_moon.jpg",
     description: "High-octane expedition traversing active Icelandic volcanic craters and deep-sea trench submersibles.",
-    duration: "8 Days / 7 Nights",
+    duration: "8 Days",
     gravity: "1.00 g (Earth)",
     price: "⚡ 75,000 Credits",
     days: [
@@ -254,6 +259,7 @@ let currentExpedition = JSON.parse(JSON.stringify(EXPEDITIONS[0]));
 let selectedSuit = "obsidian";
 let currentWorldCategory = "all";
 let orbitalSimSpeed = 1;
+let selectedPackageDays = 7;
 let isAudioPlaying = false;
 let audioContext = null;
 let audioNodes = null;
@@ -262,11 +268,63 @@ let audioNodes = null;
 document.addEventListener("DOMContentLoaded", () => {
   initStarfieldCanvas();
   initOrbitSimulatorCanvas();
+  populatePackageDropdown();
   updateDropdownsForCategory("all");
   renderExpeditionCards();
   renderTimeline();
   updateTelemetryStats();
 });
+
+// --- Populate Package Dropdown Options (1 to 100 Days) ---
+function populatePackageDropdown() {
+  const pkgSelect = document.getElementById("package-select");
+  if (!pkgSelect) return;
+
+  pkgSelect.innerHTML = PACKAGE_DAY_OPTIONS.map(days => `
+    <option value="${days}" ${days === selectedPackageDays ? 'selected' : ''}>
+      ${days} ${days === 1 ? 'Day Package' : 'Days Package'}
+    </option>
+  `).join('');
+}
+
+// --- Package Duration Change Handler ---
+function handlePackageChange() {
+  const pkgSelect = document.getElementById("package-select");
+  if (!pkgSelect) return;
+
+  selectedPackageDays = parseInt(pkgSelect.value, 10);
+  
+  // Adjust days in current expedition
+  adjustTimelineDays(selectedPackageDays);
+
+  renderTimeline();
+  updateTelemetryStats();
+  showToast(`Package set to ${selectedPackageDays} Days`);
+}
+
+function adjustTimelineDays(targetDays) {
+  const currentLength = currentExpedition.days.length;
+
+  if (targetDays > currentLength) {
+    // Append additional days up to targetDays
+    for (let i = currentLength + 1; i <= targetDays; i++) {
+      currentExpedition.days.push({
+        day: i,
+        location: `Expedition Stop #${i} (${currentExpedition.category.toUpperCase().replace('-', ' ')})`,
+        activities: [
+          {
+            type: currentExpedition.category === 'beyond-earth' ? 'spaceflight' : 'adventure',
+            title: `Day ${i} Specialized Activity`,
+            desc: `Custom curated experience for Day ${i} of your package.`
+          }
+        ]
+      });
+    }
+  } else if (targetDays < currentLength) {
+    // Truncate days to targetDays
+    currentExpedition.days = currentExpedition.days.slice(0, targetDays);
+  }
+}
 
 // --- Dynamic Dropdown Populator ---
 function updateDropdownsForCategory(category) {
@@ -276,17 +334,14 @@ function updateDropdownsForCategory(category) {
 
   const data = CATEGORY_DROPDOWN_DATA[category] || CATEGORY_DROPDOWN_DATA["all"];
 
-  // Populate Departure (Source)
   depSelect.innerHTML = data.sources.map(s => `
     <option value="${s.value}" data-type="${s.type}">${s.label}</option>
   `).join('');
 
-  // Populate Arrival (Destination)
   arrSelect.innerHTML = data.destinations.map(d => `
     <option value="${d.value}" data-type="${d.type}">${d.label}</option>
   `).join('');
 
-  // Update Transport Modes based on newly selected category & locations!
   updateTransportModes(category);
 }
 
@@ -307,16 +362,11 @@ function updateTransportModes(categoryOverride) {
 
   let optionsToRender = [];
 
-  // Rule 1: Beyond Earth OR any Space destination -> ONLY Space Shuttles / Starships!
   if (category === "beyond-earth" || depType === "space" || arrType === "space") {
     optionsToRender = TRANSPORT_MODES_DATA["space"];
-  } 
-  // Rule 2: Earth Inland / Regional routes -> High-Speed Trains, Helis, Rovers, Regional Air!
-  else if (depType === "earth-inland" || arrType === "earth-inland") {
+  } else if (depType === "earth-inland" || arrType === "earth-inland") {
     optionsToRender = [...TRANSPORT_MODES_DATA["inland"], TRANSPORT_MODES_DATA["intercontinental"][0]];
-  }
-  // Rule 3: Earth Intercontinental / Ocean Crossings -> Supersonic Jets, Airliners, Ocean Superyachts
-  else {
+  } else {
     optionsToRender = TRANSPORT_MODES_DATA["intercontinental"];
   }
 
@@ -360,7 +410,6 @@ function switchWorld(category) {
       : "Beyond Earth Celestial Expeditions";
   }
 
-  // Sync Dropdowns and Transport Modes!
   updateDropdownsForCategory(category);
   renderExpeditionCards();
 
@@ -634,6 +683,10 @@ function loadPreset(presetId) {
   const found = EXPEDITIONS.find(e => e.id === presetId);
   if (found) {
     currentExpedition = JSON.parse(JSON.stringify(found));
+    selectedPackageDays = currentExpedition.days.length;
+    const pkgSelect = document.getElementById("package-select");
+    if (pkgSelect) pkgSelect.value = selectedPackageDays;
+
     renderTimeline();
     scrollToPlanner();
     showToast(`Loaded ${found.title}`);
@@ -649,9 +702,10 @@ function handleQuickSearch(e) {
   const dep = document.getElementById("departure-select").options[document.getElementById("departure-select").selectedIndex]?.text;
   const arr = document.getElementById("arrival-select").options[document.getElementById("arrival-select").selectedIndex]?.text;
   const vessel = document.getElementById("vessel-select").options[document.getElementById("vessel-select").selectedIndex]?.text;
+  const pkg = document.getElementById("package-select").value;
 
   scrollToPlanner();
-  showToast(`Selected mode: ${vessel?.split(' ')[1] || vessel} (${dep?.split('—')[1] || dep} ➔ ${arr?.split('—')[1] || arr})`);
+  showToast(`Package: ${pkg} Days | Mode: ${vessel?.split(' ')[1] || vessel}`);
 }
 
 function scrollToPlanner() {
@@ -725,6 +779,7 @@ function openSpacePassModal() {
   const depSelect = document.getElementById("departure-select");
   const arrSelect = document.getElementById("arrival-select");
   const vesselSelect = document.getElementById("vessel-select");
+  const pkgSelect = document.getElementById("package-select");
 
   document.getElementById("modal-trip-name").innerText = currentExpedition.title;
   document.getElementById("modal-suit-tier").innerText = `MODE: ${vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "VESSEL"}`;
@@ -733,7 +788,7 @@ function openSpacePassModal() {
   document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";
   document.getElementById("modal-launch-date").innerText = document.getElementById("date-input").value;
   document.getElementById("modal-gravity-val").innerText = currentExpedition.gravity;
-  document.getElementById("modal-duration-val").innerText = `${currentExpedition.days.length} DAYS`;
+  document.getElementById("modal-duration-val").innerText = `${pkgSelect ? pkgSelect.value : currentExpedition.days.length} DAYS PACKAGE`;
   document.getElementById("modal-pass-id").innerText = `PASS #AST-${Math.floor(1000 + Math.random() * 9000)}-PORTAL`;
 
   modal.classList.add("active");
