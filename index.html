@@ -25,7 +25,7 @@
         <span class="logo-prefix">astranav</span>
         <div class="logo-text">Beyond-Universe</div>
       </div>
-      <span class="logo-badge">v6.2 PDF Engine</span>
+      <span class="logo-badge">v6.5 Webhook PDF</span>
     </div>
     
     <ul class="nav-menu">
@@ -131,7 +131,7 @@
         <div class="api-info-banner">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <i data-lucide="webhook" style="color: var(--primary-cyan)"></i>
-            <span><strong>Backend Webhook Engine:</strong> Clicking 'Filter & Launch' fires your n8n Webhook URL to generate & populate the <em>Interactive Expedition Workspace</em> below.</span>
+            <span><strong>Backend Webhook Engine:</strong> Click 'Filter & Launch' to fire n8n Webhook, populate workspace timeline, and enable PDF Download.</span>
           </div>
           <span class="api-info-badge">n8n Connected</span>
         </div>
@@ -160,7 +160,7 @@
           <p class="section-subtitle">Dynamically generated day-by-day itinerary timeline populated from Webhook responses.</p>
         </div>
         <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;">
-          <button class="btn-audio" onclick="downloadItineraryPDF()" style="background: rgba(0, 240, 255, 0.12); border-color: var(--primary-cyan); color: var(--primary-cyan); font-weight: 700;">
+          <button class="btn-audio" id="btn-download-pdf" onclick="downloadItineraryPDF()" disabled style="opacity: 0.4; cursor: not-allowed; background: rgba(255,255,255,0.05); border-color: var(--glass-border); color: var(--text-muted); font-weight: 700;" title="Click 'Filter & Launch' first to enable PDF download">
             <i data-lucide="download"></i> Download Itinerary PDF
           </button>
           <button class="btn-primary" onclick="resetToPreset('elon-moon')">
@@ -314,7 +314,7 @@
         <div class="ticket-stub">
           <div class="qr-code-placeholder">
             <svg viewBox="0 0 100 100" width="100" height="100">
-              <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v20 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
+              <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v10 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
             </svg>
           </div>
           <span class="ticket-seq" id="modal-pass-id">PASS #AST-9021-CELESTIAL</span>

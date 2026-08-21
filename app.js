@@ -489,8 +489,22 @@ async function handleQuickSearch(e) {
       if (window.lucide) lucide.createIcons();
     }
     renderTimeline();
+    enablePdfDownloadButton();
   }
 }
+
+function enablePdfDownloadButton() {
+  const btn = document.getElementById("btn-download-pdf");
+  if (!btn) return;
+  btn.disabled = false;
+  btn.style.opacity = "1";
+  btn.style.cursor = "pointer";
+  btn.style.background = "rgba(0, 240, 255, 0.15)";
+  btn.style.borderColor = "var(--primary-cyan)";
+  btn.style.color = "var(--primary-cyan)";
+  btn.title = "Download Webhook Itinerary PDF";
+}
+
 
 // --- Robust Parser for Webhook Response Data ---
 function parseAndRenderWebhookResponse(data, payload) {
