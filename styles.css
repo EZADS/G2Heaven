@@ -261,6 +261,130 @@ html, body {
   box-shadow: 0 0 35px rgba(0, 240, 255, 0.5);
 }
 
+/* Webhook Loading Overlay with Live Rocket Animation */
+.webhook-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(3, 5, 12, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.webhook-loading-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loading-card {
+  background: linear-gradient(135deg, rgba(13, 18, 36, 0.98), rgba(5, 7, 15, 0.98));
+  border: 2px solid var(--primary-cyan);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 0 70px rgba(0, 240, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rocket-anim-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rocket-icon-pulse {
+  font-size: 3.8rem;
+  animation: rocketLaunch 1.4s infinite ease-in-out alternate;
+  z-index: 2;
+  filter: drop-shadow(0 0 25px #00f0ff);
+}
+
+@keyframes rocketLaunch {
+  0% { transform: translateY(6px) rotate(-5deg) scale(0.95); }
+  100% { transform: translateY(-12px) rotate(5deg) scale(1.1); }
+}
+
+.rocket-trail {
+  position: absolute;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 0, 127, 0.6) 0%, rgba(0, 240, 255, 0.4) 50%, transparent 80%);
+  border-radius: 50%;
+  animation: trailGlow 0.8s infinite alternate;
+  filter: blur(8px);
+}
+
+@keyframes trailGlow {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 0.9; }
+}
+
+.loading-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  padding: 0.3rem 0.9rem;
+  background: rgba(0, 240, 255, 0.15);
+  border: 1px solid var(--primary-cyan);
+  color: var(--primary-cyan);
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.loading-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.loading-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.loading-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-cyan), var(--primary-magenta), var(--accent-gold));
+  animation: loadingProgress 1.6s infinite ease-in-out;
+}
+
+@keyframes loadingProgress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 /* On-Screen Prompt Banner */
 .itinerary-ready-prompt {
   position: fixed;

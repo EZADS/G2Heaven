@@ -454,6 +454,7 @@ async function handleQuickSearch(e) {
   };
 
   scrollToPlanner();
+  showWebhookLoadingOverlay();
 
   if (btnSubmit) {
     btnSubmit.innerHTML = `<i data-lucide="loader-2" class="spin"></i> Dispatching Webhook...`;
@@ -483,6 +484,7 @@ async function handleQuickSearch(e) {
     updateExpeditionFromPayload(payload);
     showToast(`Dispatched Webhook (${payload.pax} PAX)! Applied dynamic workspace timeline.`);
   } finally {
+    hideWebhookLoadingOverlay();
     if (btnSubmit) {
       btnSubmit.innerHTML = `<i data-lucide="sparkles"></i> Filter & Launch`;
       btnSubmit.disabled = false;
@@ -493,6 +495,17 @@ async function handleQuickSearch(e) {
     showItineraryReadyPrompt("YOUR ITINERARY IS READY FOR INTERACTION");
   }
 }
+
+function showWebhookLoadingOverlay() {
+  const overlay = document.getElementById("webhook-loading-overlay");
+  if (overlay) overlay.classList.add("active");
+}
+
+function hideWebhookLoadingOverlay() {
+  const overlay = document.getElementById("webhook-loading-overlay");
+  if (overlay) overlay.classList.remove("active");
+}
+
 
 
 function showItineraryReadyPrompt(msg) {
