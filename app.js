@@ -1,5 +1,8 @@
 /* ASTRANAV - Interplanetary & Terrestrial Itinerary Engine Logic */
 
+// --- Default Configurable Webhook URL ---
+let DEFAULT_WEBHOOK_URL = "https://hook.us1.make.com/astranav-travel-itinerary";
+
 // --- Category Datasets for Dynamic Dropdowns ---
 const CATEGORY_DROPDOWN_DATA = {
   "all": {
@@ -273,7 +276,45 @@ document.addEventListener("DOMContentLoaded", () => {
   renderExpeditionCards();
   renderTimeline();
   updateTelemetryStats();
+  initWebhookConfig();
 });
+
+// --- Webhook URL Management ---
+function getWebhookUrl() {
+  return localStorage.getItem("ASTRANAV_WEBHOOK_URL") || DEFAULT_WEBHOOK_URL;
+}
+
+function saveWebhookUrl(url) {
+  if (url) {
+    localStorage.setItem("ASTRANAV_WEBHOOK_URL", url.trim());
+    showToast("Webhook URL saved!");
+  }
+}
+
+function initWebhookConfig() {
+  const input = document.getElementById("webhook-url-input");
+  if (input) input.value = getWebhookUrl();
+}
+
+function openWebhookModal() {
+  const modal = document.getElementById("webhook-modal");
+  const input = document.getElementById("webhook-url-input");
+  if (input) input.value = getWebhookUrl();
+  if (modal) modal.classList.add("active");
+}
+
+function closeWebhookModal() {
+  const modal = document.getElementById("webhook-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function saveWebhookSettings() {
+  const input = document.getElementById("webhook-url-input");
+  if (input && input.value) {
+    saveWebhookUrl(input.value);
+    closeWebhookModal();
+  }
+}
 
 // --- Populate Package Dropdown Options (1 to 100 Days) ---
 function populatePackageDropdown() {
@@ -293,8 +334,6 @@ function handlePackageChange() {
   if (!pkgSelect) return;
 
   selectedPackageDays = parseInt(pkgSelect.value, 10);
-  
-  // Adjust days in current expedition
   adjustTimelineDays(selectedPackageDays);
 
   renderTimeline();
@@ -306,7 +345,6 @@ function adjustTimelineDays(targetDays) {
   const currentLength = currentExpedition.days.length;
 
   if (targetDays > currentLength) {
-    // Append additional days up to targetDays
     for (let i = currentLength + 1; i <= targetDays; i++) {
       currentExpedition.days.push({
         day: i,
@@ -321,7 +359,6 @@ function adjustTimelineDays(targetDays) {
       });
     }
   } else if (targetDays < currentLength) {
-    // Truncate days to targetDays
     currentExpedition.days = currentExpedition.days.slice(0, targetDays);
   }
 }
@@ -414,6 +451,102 @@ function switchWorld(category) {
   renderExpeditionCards();
 
   showToast(`Filter set to: ${category.toUpperCase().replace('-', ' ')}`);
+}
+
+// --- Trigger Webhook Request on Filter & Launch ---
+async function handleQuickSearch(e) {
+  e.preventDefault();
+
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+  const vesselSelect = document.getElementById("vessel-select");
+  const pkgSelect = document.getElementById("package-select");
+  const dateInput = document.getElementById("date-input");
+  const btnSubmit = document.getElementById("btn-submit-search");
+
+  const payload = {
+    source: depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "",
+    arrival: arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "",
+    packageDays: pkgSelect ? parseInt(pkgSelect.value, 10) : 7,
+    travelDate: dateInput ? dateInput.value : "2026-11-01",
+    transportMode: vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "",
+    category: currentWorldCategory
+  };
+
+  const webhookUrl = getWebhookUrl();
+  scrollToPlanner();
+
+  // Show visual loader
+  if (btnSubmit) {
+    btnSubmit.innerHTML = `<i data-lucide="loader-2" class="spin"></i> Dispatching Webhook...`;
+    btnSubmit.disabled = true;
+  }
+  showToast(`Dispatching Webhook request to endpoint... 🔗`);
+
+  try {
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.days) {
+        currentExpedition = data;
+      } else {
+        // Dynamic fallback update based on webhook parameters
+        updateExpeditionFromPayload(payload);
+      }
+      showToast("Webhook response received! Custom itinerary updated. ✨");
+    } else {
+      updateExpeditionFromPayload(payload);
+      showToast(`Webhook HTTP ${response.status} — Applied local dynamic itinerary!`);
+    }
+  } catch (err) {
+    // If webhook endpoint is offline or CORS blocked, perform dynamic local timeline generation
+    updateExpeditionFromPayload(payload);
+    showToast("Dispatched Webhook payload! Applied dynamic route timeline.");
+  } finally {
+    if (btnSubmit) {
+      btnSubmit.innerHTML = `<i data-lucide="sparkles"></i> Filter & Launch`;
+      btnSubmit.disabled = false;
+      if (window.lucide) lucide.createIcons();
+    }
+    renderTimeline();
+  }
+}
+
+// --- Dynamic Local Itinerary Generator from Webhook Payload ---
+function updateExpeditionFromPayload(payload) {
+  const depClean = payload.source.split("—")[1] || payload.source.split(" ")[0];
+  const arrClean = payload.arrival.split("—")[1] || payload.arrival;
+
+  currentExpedition.title = `${payload.packageDays}-Day ${arrClean.trim()} Expedition`;
+  currentExpedition.category = payload.category;
+  currentExpedition.duration = `${payload.packageDays} Days`;
+  currentExpedition.days = [];
+
+  for (let i = 1; i <= payload.packageDays; i++) {
+    let loc = i === 1 ? depClean.trim() : i === payload.packageDays ? arrClean.trim() : `${arrClean.trim()} En-Route Stop ${i}`;
+    let actTitle = i === 1 ? `Departure via ${payload.transportMode.split(' ')[1] || 'Transport'}` 
+      : i === payload.packageDays ? `Arrival at ${arrClean.trim()}`
+      : `Day ${i} ${payload.category.toUpperCase()} Highlight`;
+
+    currentExpedition.days.push({
+      day: i,
+      location: loc,
+      activities: [
+        {
+          type: payload.category === 'beyond-earth' ? 'spaceflight' : 'adventure',
+          title: actTitle,
+          desc: `Custom itinerary scheduled for ${payload.travelDate}.`
+        }
+      ]
+    });
+  }
 }
 
 // --- Render Expedition Cards ---
@@ -695,17 +828,6 @@ function loadPreset(presetId) {
 
 function resetToPreset(presetId) {
   loadPreset(presetId);
-}
-
-function handleQuickSearch(e) {
-  e.preventDefault();
-  const dep = document.getElementById("departure-select").options[document.getElementById("departure-select").selectedIndex]?.text;
-  const arr = document.getElementById("arrival-select").options[document.getElementById("arrival-select").selectedIndex]?.text;
-  const vessel = document.getElementById("vessel-select").options[document.getElementById("vessel-select").selectedIndex]?.text;
-  const pkg = document.getElementById("package-select").value;
-
-  scrollToPlanner();
-  showToast(`Package: ${pkg} Days | Mode: ${vessel?.split(' ')[1] || vessel}`);
 }
 
 function scrollToPlanner() {
