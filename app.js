@@ -4,71 +4,91 @@
 const CATEGORY_DROPDOWN_DATA = {
   "all": {
     sources: [
-      { value: "cape-canaveral", label: "🚀 Earth — Cape Canaveral Launch Complex 39A" },
-      { value: "starbase-texas", label: "🚀 Earth — Boca Chica Starbase, Texas" },
-      { value: "tokyo-haneda", label: "🛫 Earth — Tokyo Haneda Airport (HND)" },
-      { value: "paris-cdg", label: "🛫 Earth — Paris Charles de Gaulle (CDG)" },
-      { value: "reykjavik-kef", label: "🧗‍♂️ Earth — Reykjavik Keflavik Airport (KEF)" },
-      { value: "nairobi-jki", label: "🧗‍♂️ Earth — Nairobi Jomo Kenyatta (NBO)" },
-      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub" }
+      { value: "cape-canaveral", label: "🚀 Earth — Cape Canaveral Launch Complex 39A", type: "space" },
+      { value: "starbase-texas", label: "🚀 Earth — Boca Chica Starbase, Texas", type: "space" },
+      { value: "tokyo-haneda", label: "🛫 Earth — Tokyo Haneda Airport (HND)", type: "earth" },
+      { value: "paris-cdg", label: "🛫 Earth — Paris Charles de Gaulle (CDG)", type: "earth" },
+      { value: "reykjavik-kef", label: "🧗‍♂️ Earth — Reykjavik Keflavik Airport (KEF)", type: "earth" },
+      { value: "nairobi-jki", label: "🧗‍♂️ Earth — Nairobi Jomo Kenyatta (NBO)", type: "earth" },
+      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub", type: "space" }
     ],
     destinations: [
-      { value: "luna-city", label: "🌕 Moon — Luna City Artemis Base & Grand Hilton" },
-      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort" },
-      { value: "leo-reef", label: "🛰️ Low Earth Orbit — Reef Luxury Hotel (Zero-G)" },
-      { value: "kyoto-ryokan", label: "✨ Earth — Kyoto Luxury Ryokan & Bamboo Forest" },
-      { value: "swiss-alps", label: "✨ Earth — Swiss Alps Heli-Ski Chalet, Zermatt" },
-      { value: "iceland-volcano", label: "🧗‍♂️ Earth — Iceland Geldingadalir Volcano Trek" },
-      { value: "amazon-safari", label: "🧗‍♂️ Earth — Amazon Rainforest Eco Canopy Lodge" },
-      { value: "barrier-reef", label: "🧗‍♂️ Earth — Great Barrier Reef Deep Submersible Dive" }
+      { value: "luna-city", label: "🌕 Moon — Luna City Artemis Base & Grand Hilton", type: "space" },
+      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort", type: "space" },
+      { value: "leo-reef", label: "🛰️ Low Earth Orbit — Reef Luxury Hotel (Zero-G)", type: "space" },
+      { value: "kyoto-ryokan", label: "✨ Earth — Kyoto Luxury Ryokan & Bamboo Forest", type: "earth-inland" },
+      { value: "swiss-alps", label: "✨ Earth — Swiss Alps Heli-Ski Chalet, Zermatt", type: "earth-inland" },
+      { value: "iceland-volcano", label: "🧗‍♂️ Earth — Iceland Geldingadalir Volcano Trek", type: "earth-inland" },
+      { value: "amazon-safari", label: "🧗‍♂️ Earth — Amazon Rainforest Eco Canopy Lodge", type: "earth-inland" },
+      { value: "barrier-reef", label: "🧗‍♂️ Earth — Great Barrier Reef Deep Submersible Dive", type: "earth-ocean" }
     ]
   },
   "earth-luxury": {
     sources: [
-      { value: "tokyo-haneda", label: "🛫 Tokyo Haneda International (HND)" },
-      { value: "paris-cdg", label: "🛫 Paris Charles de Gaulle (CDG)" },
-      { value: "zurich-airport", label: "🛫 Zurich International Airport (ZRH)" },
-      { value: "monaco-heliport", label: "🚁 Monaco Monte Carlo Heliport" },
-      { value: "newyork-jfk", label: "🛫 New York JFK Executive Terminal" }
+      { value: "tokyo-haneda", label: "🛫 Tokyo Haneda International (HND)", type: "earth" },
+      { value: "paris-cdg", label: "🛫 Paris Charles de Gaulle (CDG)", type: "earth" },
+      { value: "zurich-airport", label: "🛫 Zurich International Airport (ZRH)", type: "earth" },
+      { value: "monaco-heliport", label: "🚁 Monaco Monte Carlo Heliport", type: "earth-inland" },
+      { value: "newyork-jfk", label: "🛫 New York JFK Executive Terminal", type: "earth" }
     ],
     destinations: [
-      { value: "kyoto-ryokan", label: "✨ Kyoto Luxury Bamboo Sanctuary & Onsen Villa" },
-      { value: "swiss-alps", label: "✨ Swiss Alps Heli-Ski Luxury Chalet, Zermatt" },
-      { value: "amalfi-yacht", label: "✨ Amalfi Coast Private Superyacht Cruise" },
-      { value: "bordeaux-chateau", label: "✨ Bordeaux Private Grand Cru Vineyard Estate" },
-      { value: "maldives-bungalow", label: "✨ Maldives Overwater Glass Villa Sanctuary" }
+      { value: "kyoto-ryokan", label: "✨ Kyoto Luxury Bamboo Sanctuary & Onsen Villa", type: "earth-inland" },
+      { value: "swiss-alps", label: "✨ Swiss Alps Heli-Ski Luxury Chalet, Zermatt", type: "earth-inland" },
+      { value: "amalfi-yacht", label: "✨ Amalfi Coast Private Superyacht Cruise", type: "earth-ocean" },
+      { value: "bordeaux-chateau", label: "✨ Bordeaux Private Grand Cru Vineyard Estate", type: "earth-inland" },
+      { value: "maldives-bungalow", label: "✨ Maldives Overwater Glass Villa Sanctuary", type: "earth-ocean" }
     ]
   },
   "earth-adventure": {
     sources: [
-      { value: "reykjavik-kef", label: "🧗‍♂️ Reykjavik International Airport (KEF)" },
-      { value: "nairobi-jki", label: "🧗‍♂️ Nairobi Jomo Kenyatta International (NBO)" },
-      { value: "manaus-amazon", label: "🧗‍♂️ Manaus Amazon International Port (MAO)" },
-      { value: "cairns-airport", label: "🧗‍♂️ Cairns Great Barrier Reef Base (CNS)" },
-      { value: "ushuaia-patagonia", label: "🧗‍♂️ Ushuaia Tierra del Fuego Expedition Port" }
+      { value: "reykjavik-kef", label: "🧗‍♂️ Reykjavik International Airport (KEF)", type: "earth" },
+      { value: "nairobi-jki", label: "🧗‍♂️ Nairobi Jomo Kenyatta International (NBO)", type: "earth" },
+      { value: "manaus-amazon", label: "🧗‍♂️ Manaus Amazon International Port (MAO)", type: "earth-inland" },
+      { value: "cairns-airport", label: "🧗‍♂️ Cairns Great Barrier Reef Base (CNS)", type: "earth" },
+      { value: "ushuaia-patagonia", label: "🧗‍♂️ Ushuaia Tierra del Fuego Expedition Port", type: "earth-ocean" }
     ],
     destinations: [
-      { value: "iceland-volcano", label: "🌋 Iceland Geldingadalir Volcano & Lava Trek" },
-      { value: "amazon-safari", label: "🌿 Amazon Rainforest Deep Canopy Survival Lodge" },
-      { value: "barrier-reef", label: "🌊 Great Barrier Reef Submersible Trench Dive" },
-      { value: "serengeti-safari", label: "🦁 Serengeti National Park Night Helicopter Safari" },
-      { value: "patagonia-glacier", label: "🧊 Patagonia Perito Moreno Glacier Expedition" }
+      { value: "iceland-volcano", label: "🌋 Iceland Geldingadalir Volcano & Lava Trek", type: "earth-inland" },
+      { value: "amazon-safari", label: "🌿 Amazon Rainforest Deep Canopy Survival Lodge", type: "earth-inland" },
+      { value: "barrier-reef", label: "🌊 Great Barrier Reef Submersible Trench Dive", type: "earth-ocean" },
+      { value: "serengeti-safari", label: "🦁 Serengeti National Park Night Helicopter Safari", type: "earth-inland" },
+      { value: "patagonia-glacier", label: "🧊 Patagonia Perito Moreno Glacier Expedition", type: "earth-inland" }
     ]
   },
   "beyond-earth": {
     sources: [
-      { value: "cape-canaveral", label: "🚀 Cape Canaveral SpaceX Pad 39A" },
-      { value: "starbase-texas", label: "🚀 Boca Chica Starbase Complex, Texas" },
-      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub" },
-      { value: "baikonur-pad", label: "🚀 Baikonur Commercial Orbital Launchpad" }
+      { value: "cape-canaveral", label: "🚀 Cape Canaveral SpaceX Pad 39A", type: "space" },
+      { value: "starbase-texas", label: "🚀 Boca Chica Starbase Complex, Texas", type: "space" },
+      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub", type: "space" },
+      { value: "baikonur-pad", label: "🚀 Baikonur Commercial Orbital Launchpad", type: "space" }
     ],
     destinations: [
-      { value: "luna-city", label: "🌕 Luna City Artemis Base & Grand Hilton" },
-      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort" },
-      { value: "leo-reef", label: "🛰️ Low Earth Orbit Reef Hotel (Zero-G)" },
-      { value: "valles-marineris", label: "🪐 Mars — Valles Marineris Canyon Outpost" }
+      { value: "luna-city", label: "🌕 Luna City Artemis Base & Grand Hilton", type: "space" },
+      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort", type: "space" },
+      { value: "leo-reef", label: "🛰️ Low Earth Orbit Reef Hotel (Zero-G)", type: "space" },
+      { value: "valles-marineris", label: "🪐 Mars — Valles Marineris Canyon Outpost", type: "space" }
     ]
   }
+};
+
+// --- Dynamic Transport Mode Database ---
+const TRANSPORT_MODES_DATA = {
+  "space": [
+    { value: "starship", label: "🚀 SpaceX Starship Super Heavy Mk-IV" },
+    { value: "orion", label: "🛰️ Artemis Deep Space Transit Clipper" },
+    { value: "aetheris-yacht", label: "✨ Aetheris Executive Zero-G Yacht" }
+  ],
+  "intercontinental": [
+    { value: "supersonic", label: "⚡ Supersonic SkyLiner Executive Jet" },
+    { value: "commercial-first", label: "✈️ Commercial First-Class Long-Haul Airliner" },
+    { value: "superyacht-ocean", label: "🚢 Trans-Oceanic Luxury Superyacht Cruise" }
+  ],
+  "inland": [
+    { value: "maglev-train", label: "🚆 High-Speed Maglev Bullet Train / Rail" },
+    { value: "heli-shuttle", label: "🚁 Private Heli-Ski / VIP Helicopter Shuttle" },
+    { value: "rover-4x4", label: "🚜 4x4 Expedition Wilderness Rover" },
+    { value: "regional-air", label: "✈️ Regional Air Shuttle" }
+  ]
 };
 
 // --- Expeditions Database ---
@@ -258,20 +278,63 @@ function updateDropdownsForCategory(category) {
 
   // Populate Departure (Source)
   depSelect.innerHTML = data.sources.map(s => `
-    <option value="${s.value}">${s.label}</option>
+    <option value="${s.value}" data-type="${s.type}">${s.label}</option>
   `).join('');
 
   // Populate Arrival (Destination)
   arrSelect.innerHTML = data.destinations.map(d => `
-    <option value="${d.value}">${d.label}</option>
+    <option value="${d.value}" data-type="${d.type}">${d.label}</option>
   `).join('');
+
+  // Update Transport Modes based on newly selected category & locations!
+  updateTransportModes(category);
+}
+
+// --- Dynamic Transport Mode Filtering Engine ---
+function updateTransportModes(categoryOverride) {
+  const category = categoryOverride || currentWorldCategory;
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+  const vesselSelect = document.getElementById("vessel-select");
+
+  if (!vesselSelect) return;
+
+  const depOpt = depSelect ? depSelect.options[depSelect.selectedIndex] : null;
+  const arrOpt = arrSelect ? arrSelect.options[arrSelect.selectedIndex] : null;
+
+  const depType = depOpt ? depOpt.getAttribute("data-type") : "";
+  const arrType = arrOpt ? arrOpt.getAttribute("data-type") : "";
+
+  let optionsToRender = [];
+
+  // Rule 1: Beyond Earth OR any Space destination -> ONLY Space Shuttles / Starships!
+  if (category === "beyond-earth" || depType === "space" || arrType === "space") {
+    optionsToRender = TRANSPORT_MODES_DATA["space"];
+  } 
+  // Rule 2: Earth Inland / Regional routes -> High-Speed Trains, Helis, Rovers, Regional Air!
+  else if (depType === "earth-inland" || arrType === "earth-inland") {
+    optionsToRender = [...TRANSPORT_MODES_DATA["inland"], TRANSPORT_MODES_DATA["intercontinental"][0]];
+  }
+  // Rule 3: Earth Intercontinental / Ocean Crossings -> Supersonic Jets, Airliners, Ocean Superyachts
+  else {
+    optionsToRender = TRANSPORT_MODES_DATA["intercontinental"];
+  }
+
+  vesselSelect.innerHTML = optionsToRender.map(v => `
+    <option value="${v.value}">${v.label}</option>
+  `).join('');
+}
+
+function handleLocationChange() {
+  updateTransportModes();
+  const vesselName = document.getElementById("vessel-select").options[0]?.text || "Transport Mode";
+  showToast(`Transport mode updated: ${vesselName.split(' ')[1] || vesselName}`);
 }
 
 // --- Menu Tab & Category Switcher ---
 function switchWorld(category) {
   currentWorldCategory = category;
 
-  // Active button state for World Selector
   const categories = ['all', 'earth-luxury', 'earth-adventure', 'beyond-earth'];
   categories.forEach(c => {
     const btn = document.getElementById(`btn-world-${c}`);
@@ -281,7 +344,6 @@ function switchWorld(category) {
     if (navItem) navItem.classList.toggle('active', c === category);
   });
 
-  // Background Theme Switch
   const bgOverlay = document.getElementById("bg-overlay");
   if (bgOverlay) {
     bgOverlay.className = "hero-bg-overlay";
@@ -290,9 +352,7 @@ function switchWorld(category) {
     if (category === "earth-adventure") bgOverlay.classList.add("earth-adventure-theme");
   }
 
-  // Update Section Title & Subtitle
   const secTitle = document.getElementById("expedition-section-title");
-  const secSub = document.getElementById("expedition-section-subtitle");
   if (secTitle) {
     secTitle.innerText = category === "all" ? "All Featured Expeditions" 
       : category === "earth-luxury" ? "Earth Luxuries Expeditions" 
@@ -300,11 +360,10 @@ function switchWorld(category) {
       : "Beyond Earth Celestial Expeditions";
   }
 
-  // Dynamic Dropdown Synchronization!
+  // Sync Dropdowns and Transport Modes!
   updateDropdownsForCategory(category);
-
-  // Re-render filtered expedition cards
   renderExpeditionCards();
+
   showToast(`Filter set to: ${category.toUpperCase().replace('-', ' ')}`);
 }
 
@@ -421,7 +480,6 @@ function initOrbitSimulatorCanvas() {
     const destX = w - 60;
     const destY = h / 2;
 
-    // Draw Origin Earth
     ctx.beginPath();
     ctx.arc(earthX, earthY, 22, 0, Math.PI * 2);
     ctx.fillStyle = "#00a8ff";
@@ -433,7 +491,6 @@ function initOrbitSimulatorCanvas() {
     ctx.fillStyle = "#ffffff";
     ctx.fillText("SOURCE", earthX - 20, earthY + 36);
 
-    // Draw Destination
     ctx.beginPath();
     ctx.arc(destX, destY, 14, 0, Math.PI * 2);
     ctx.fillStyle = currentWorldCategory === "beyond-earth" ? "#ff007f" : "#10b981";
@@ -443,7 +500,6 @@ function initOrbitSimulatorCanvas() {
 
     ctx.fillText("DESTINATION", destX - 30, destY + 28);
 
-    // Transfer Arc Line
     ctx.beginPath();
     ctx.setLineDash([4, 4]);
     ctx.moveTo(earthX, earthY);
@@ -453,7 +509,6 @@ function initOrbitSimulatorCanvas() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Animated Transport Craft
     orbitAngle += 0.015 * orbitalSimSpeed;
     if (orbitAngle > Math.PI) orbitAngle = 0;
 
@@ -593,9 +648,10 @@ function handleQuickSearch(e) {
   e.preventDefault();
   const dep = document.getElementById("departure-select").options[document.getElementById("departure-select").selectedIndex]?.text;
   const arr = document.getElementById("arrival-select").options[document.getElementById("arrival-select").selectedIndex]?.text;
+  const vessel = document.getElementById("vessel-select").options[document.getElementById("vessel-select").selectedIndex]?.text;
 
   scrollToPlanner();
-  showToast(`Filtered route: ${dep?.split('—')[1] || dep} ➔ ${arr?.split('—')[1] || arr}`);
+  showToast(`Selected mode: ${vessel?.split(' ')[1] || vessel} (${dep?.split('—')[1] || dep} ➔ ${arr?.split('—')[1] || arr})`);
 }
 
 function scrollToPlanner() {
@@ -668,9 +724,10 @@ function openSpacePassModal() {
 
   const depSelect = document.getElementById("departure-select");
   const arrSelect = document.getElementById("arrival-select");
+  const vesselSelect = document.getElementById("vessel-select");
 
   document.getElementById("modal-trip-name").innerText = currentExpedition.title;
-  document.getElementById("modal-suit-tier").innerText = `GEAR: ${selectedSuit.toUpperCase()} VIP`;
+  document.getElementById("modal-suit-tier").innerText = `MODE: ${vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "VESSEL"}`;
   document.getElementById("modal-passenger-name").innerText = "VIP EXPLORER";
   document.getElementById("modal-launchpad").innerText = depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "DEPARTURE HUB";
   document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";

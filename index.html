@@ -20,7 +20,7 @@
     <div class="logo-container">
       <div class="logo-icon">🚀</div>
       <div class="logo-text">ASTRANAV</div>
-      <span class="logo-badge">v4.0 Portal</span>
+      <span class="logo-badge">v4.2 Dynamic Transport</span>
     </div>
     
     <ul class="nav-menu">
@@ -78,14 +78,14 @@
           <div class="search-grid">
             <div class="form-group">
               <label class="form-label"><i data-lucide="map-pin"></i> Source / Departure Hub</label>
-              <select class="form-select" id="departure-select">
+              <select class="form-select" id="departure-select" onchange="handleLocationChange()">
                 <!-- Dynamically populated by JS based on selected menu category -->
               </select>
             </div>
 
             <div class="form-group">
               <label class="form-label"><i data-lucide="navigation"></i> Arrival / Destination</label>
-              <select class="form-select" id="arrival-select">
+              <select class="form-select" id="arrival-select" onchange="handleLocationChange()">
                 <!-- Dynamically populated by JS based on selected menu category -->
               </select>
             </div>
@@ -96,12 +96,9 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label"><i data-lucide="plane"></i> Transport Mode</label>
+              <label class="form-label"><i data-lucide="truck"></i> Transport Mode</label>
               <select class="form-select" id="vessel-select">
-                <option value="starship">SpaceX Starship Super Heavy Mk-IV</option>
-                <option value="supersonic">Supersonic SkyLiner Executive Jet</option>
-                <option value="yacht">Luxury Deep-Sea Yacht / Explorer Vessel</option>
-                <option value="heli">Private Heli-Ski Helicopter Shuttle</option>
+                <!-- Dynamically filtered based on category & locations -->
               </select>
             </div>
 
