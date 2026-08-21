@@ -952,10 +952,13 @@ function loadPreset(presetId) {
     if (pkgSelect) pkgSelect.value = selectedPackageDays;
 
     renderTimeline();
+    enableExportButtons();
+    showItineraryReadyPrompt("YOUR ITINERARY IS READY FOR INTERACTION");
     scrollToPlanner();
     showToast(`Loaded ${found.title}`);
   }
 }
+
 
 function resetToPreset(presetId) {
   loadPreset(presetId);
