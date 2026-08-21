@@ -1,13 +1,84 @@
 /* ASTRANAV - Interplanetary & Terrestrial Itinerary Engine Logic */
 
-// --- Expeditions & Presets Database ---
+// --- Category Datasets for Dynamic Dropdowns ---
+const CATEGORY_DROPDOWN_DATA = {
+  "all": {
+    sources: [
+      { value: "cape-canaveral", label: "🚀 Earth — Cape Canaveral Launch Complex 39A" },
+      { value: "starbase-texas", label: "🚀 Earth — Boca Chica Starbase, Texas" },
+      { value: "tokyo-haneda", label: "🛫 Earth — Tokyo Haneda Airport (HND)" },
+      { value: "paris-cdg", label: "🛫 Earth — Paris Charles de Gaulle (CDG)" },
+      { value: "reykjavik-kef", label: "🧗‍♂️ Earth — Reykjavik Keflavik Airport (KEF)" },
+      { value: "nairobi-jki", label: "🧗‍♂️ Earth — Nairobi Jomo Kenyatta (NBO)" },
+      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub" }
+    ],
+    destinations: [
+      { value: "luna-city", label: "🌕 Moon — Luna City Artemis Base & Grand Hilton" },
+      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort" },
+      { value: "leo-reef", label: "🛰️ Low Earth Orbit — Reef Luxury Hotel (Zero-G)" },
+      { value: "kyoto-ryokan", label: "✨ Earth — Kyoto Luxury Ryokan & Bamboo Forest" },
+      { value: "swiss-alps", label: "✨ Earth — Swiss Alps Heli-Ski Chalet, Zermatt" },
+      { value: "iceland-volcano", label: "🧗‍♂️ Earth — Iceland Geldingadalir Volcano Trek" },
+      { value: "amazon-safari", label: "🧗‍♂️ Earth — Amazon Rainforest Eco Canopy Lodge" },
+      { value: "barrier-reef", label: "🧗‍♂️ Earth — Great Barrier Reef Deep Submersible Dive" }
+    ]
+  },
+  "earth-luxury": {
+    sources: [
+      { value: "tokyo-haneda", label: "🛫 Tokyo Haneda International (HND)" },
+      { value: "paris-cdg", label: "🛫 Paris Charles de Gaulle (CDG)" },
+      { value: "zurich-airport", label: "🛫 Zurich International Airport (ZRH)" },
+      { value: "monaco-heliport", label: "🚁 Monaco Monte Carlo Heliport" },
+      { value: "newyork-jfk", label: "🛫 New York JFK Executive Terminal" }
+    ],
+    destinations: [
+      { value: "kyoto-ryokan", label: "✨ Kyoto Luxury Bamboo Sanctuary & Onsen Villa" },
+      { value: "swiss-alps", label: "✨ Swiss Alps Heli-Ski Luxury Chalet, Zermatt" },
+      { value: "amalfi-yacht", label: "✨ Amalfi Coast Private Superyacht Cruise" },
+      { value: "bordeaux-chateau", label: "✨ Bordeaux Private Grand Cru Vineyard Estate" },
+      { value: "maldives-bungalow", label: "✨ Maldives Overwater Glass Villa Sanctuary" }
+    ]
+  },
+  "earth-adventure": {
+    sources: [
+      { value: "reykjavik-kef", label: "🧗‍♂️ Reykjavik International Airport (KEF)" },
+      { value: "nairobi-jki", label: "🧗‍♂️ Nairobi Jomo Kenyatta International (NBO)" },
+      { value: "manaus-amazon", label: "🧗‍♂️ Manaus Amazon International Port (MAO)" },
+      { value: "cairns-airport", label: "🧗‍♂️ Cairns Great Barrier Reef Base (CNS)" },
+      { value: "ushuaia-patagonia", label: "🧗‍♂️ Ushuaia Tierra del Fuego Expedition Port" }
+    ],
+    destinations: [
+      { value: "iceland-volcano", label: "🌋 Iceland Geldingadalir Volcano & Lava Trek" },
+      { value: "amazon-safari", label: "🌿 Amazon Rainforest Deep Canopy Survival Lodge" },
+      { value: "barrier-reef", label: "🌊 Great Barrier Reef Submersible Trench Dive" },
+      { value: "serengeti-safari", label: "🦁 Serengeti National Park Night Helicopter Safari" },
+      { value: "patagonia-glacier", label: "🧊 Patagonia Perito Moreno Glacier Expedition" }
+    ]
+  },
+  "beyond-earth": {
+    sources: [
+      { value: "cape-canaveral", label: "🚀 Cape Canaveral SpaceX Pad 39A" },
+      { value: "starbase-texas", label: "🚀 Boca Chica Starbase Complex, Texas" },
+      { value: "artemis-gateway", label: "🛰️ Moon — Artemis Gateway Orbital Hub" },
+      { value: "baikonur-pad", label: "🚀 Baikonur Commercial Orbital Launchpad" }
+    ],
+    destinations: [
+      { value: "luna-city", label: "🌕 Luna City Artemis Base & Grand Hilton" },
+      { value: "mars-olympus", label: "🪐 Mars — Olympus Mons Bio-Dome Resort" },
+      { value: "leo-reef", label: "🛰️ Low Earth Orbit Reef Hotel (Zero-G)" },
+      { value: "valles-marineris", label: "🪐 Mars — Valles Marineris Canyon Outpost" }
+    ]
+  }
+};
+
+// --- Expeditions Database ---
 const EXPEDITIONS = [
   {
     id: "elon-moon",
     title: "Elon's 7-Day Starship Lunar Odyssey",
     tag: "SpaceX Starship Exclusive",
     isElon: true,
-    category: "moon",
+    category: "beyond-earth",
     image: "assets/hero_earth_to_moon.jpg",
     description: "The ultimate Moon itinerary: launch aboard SpaceX Starship Super Heavy, dock at Artemis Gateway, and stay at Luna City Grand Suite.",
     duration: "7 Days / 6 Nights",
@@ -51,7 +122,7 @@ const EXPEDITIONS = [
         location: "Luna Base Alpha",
         activities: [
           { type: "spacewalk", title: "Official EVA Spacewalk & Flag Ceremony", desc: "Don your fitted SpaceX EVA suit for a moonwalk." },
-          { type: "hotel", title: "Earthrise Michelin Fine Dining", desc: "Molecular cuisine while watching Earth rise over the crater rim." }
+          { type: "hotel", title: "Earthrise Michelin Fine Dining", desc: "Molecular cuisine while watching Earth rise over crater rim." }
         ]
       },
       {
@@ -75,9 +146,9 @@ const EXPEDITIONS = [
     title: "Mars 14-Day Red Planet Pioneer Voyage",
     tag: "Interplanetary Explorer",
     isElon: false,
-    category: "mars",
+    category: "beyond-earth",
     image: "assets/mars_resort.jpg",
-    description: "Expedition across the Martian canyons, staying in glowing glass biomes nestled under the stars of Olympus Mons.",
+    description: "Expedition across Martian canyons, staying in glowing glass biomes under the stars of Olympus Mons.",
     duration: "14 Days / 13 Nights",
     gravity: "0.38 g (Mars)",
     price: "⚡ 1,200,000 Credits",
@@ -100,34 +171,13 @@ const EXPEDITIONS = [
     ]
   },
   {
-    id: "lunar-luxury",
-    title: "Lunar Suite Weekend Getaway",
-    tag: "Moon Luxury Stay",
+    id: "earth-heritage-luxury",
+    title: "Kyoto & Swiss Alps Imperial Luxury Sanctuary",
+    tag: "Earth Luxury Elite",
     isElon: false,
-    category: "moon",
+    category: "earth-luxury",
     image: "assets/lunar_hotel.jpg",
-    description: "A short 4-day orbital retreat at the Lunar Odyssey Suite with panoramic floor-to-ceiling Earthrise views.",
-    duration: "4 Days / 3 Nights",
-    gravity: "0.16 g (Moon)",
-    price: "⚡ 320,000 Credits",
-    days: [
-      {
-        day: 1,
-        location: "Artemis Gateway",
-        activities: [
-          { type: "hotel", title: "Check-in to Lunar Odyssey Suite", desc: "Panoramic view of Mare Imbrium." }
-        ]
-      }
-    ]
-  },
-  {
-    id: "earth-deluxe",
-    title: "Earth Grand Heritage Tour: Tokyo to Swiss Alps",
-    tag: "Terrestrial Deluxe",
-    isElon: false,
-    category: "earth",
-    image: "assets/hero_earth_to_moon.jpg",
-    description: "Experience Earth's most breathtaking sanctuaries with supersonic sky tours and private Ryokan stays.",
+    description: "Private supersonic transfer between Kyoto bamboo Ryokan retreats and 5-star Swiss Alpine heli-skiing chalets.",
     duration: "6 Days / 5 Nights",
     gravity: "1.00 g (Earth)",
     price: "⚡ 95,000 Credits",
@@ -136,7 +186,43 @@ const EXPEDITIONS = [
         day: 1,
         location: "Kyoto, Japan",
         activities: [
-          { type: "hotel", title: "Private Bamboo Ryokan & Onsen", desc: "Traditional luxury in Arashiyama." }
+          { type: "hotel", title: "Private Bamboo Ryokan & Thermal Onsen", desc: "Traditional luxury in Arashiyama." },
+          { type: "adventure", title: "Private Michelin Kaiseki Ceremony", desc: "Master chef dining experience." }
+        ]
+      },
+      {
+        day: 2,
+        location: "Zermatt, Swiss Alps",
+        activities: [
+          { type: "adventure", title: "Helicopter Skiing on Matterhorn Slopes", desc: "Private heli-drop on untouched powder." }
+        ]
+      }
+    ]
+  },
+  {
+    id: "iceland-volcano-adventure",
+    title: "Iceland Lava Trek & Great Barrier Trench Dive",
+    tag: "Earth Adventurous",
+    isElon: false,
+    category: "earth-adventure",
+    image: "assets/hero_earth_to_moon.jpg",
+    description: "High-octane expedition traversing active Icelandic volcanic craters and deep-sea trench submersibles.",
+    duration: "8 Days / 7 Nights",
+    gravity: "1.00 g (Earth)",
+    price: "⚡ 75,000 Credits",
+    days: [
+      {
+        day: 1,
+        location: "Geldingadalir, Iceland",
+        activities: [
+          { type: "adventure", title: "Active Volcanic Crater Helicopter Tour", desc: "Fly over active glowing lava rivers." }
+        ]
+      },
+      {
+        day: 2,
+        location: "Great Barrier Reef, Australia",
+        activities: [
+          { type: "adventure", title: "Deep Submersible Trench Exploration", desc: "Explore abyss ecosystems at 500m depth." }
         ]
       }
     ]
@@ -144,32 +230,125 @@ const EXPEDITIONS = [
 ];
 
 // --- State Management ---
-let currentExpedition = JSON.parse(JSON.stringify(EXPEDITIONS[0])); // Clone Elon Moon trip
+let currentExpedition = JSON.parse(JSON.stringify(EXPEDITIONS[0]));
 let selectedSuit = "obsidian";
-let currentWorldFilter = "all";
+let currentWorldCategory = "all";
 let orbitalSimSpeed = 1;
 let isAudioPlaying = false;
 let audioContext = null;
 let audioNodes = null;
 
-// --- Initialize App on DOM Load ---
+// --- Initialize App ---
 document.addEventListener("DOMContentLoaded", () => {
   initStarfieldCanvas();
   initOrbitSimulatorCanvas();
+  updateDropdownsForCategory("all");
   renderExpeditionCards();
   renderTimeline();
   updateTelemetryStats();
-  
-  // Auto-set launch date input to today + 3 months
-  const dateInput = document.getElementById("date-input");
-  if (dateInput) {
-    const futureDate = new Date();
-    futureDate.setMonth(futureDate.getMonth() + 2);
-    dateInput.value = futureDate.toISOString().split('T')[0];
-  }
 });
 
-// --- Dynamic Starfield Canvas Background Animation ---
+// --- Dynamic Dropdown Populator ---
+function updateDropdownsForCategory(category) {
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+  if (!depSelect || !arrSelect) return;
+
+  const data = CATEGORY_DROPDOWN_DATA[category] || CATEGORY_DROPDOWN_DATA["all"];
+
+  // Populate Departure (Source)
+  depSelect.innerHTML = data.sources.map(s => `
+    <option value="${s.value}">${s.label}</option>
+  `).join('');
+
+  // Populate Arrival (Destination)
+  arrSelect.innerHTML = data.destinations.map(d => `
+    <option value="${d.value}">${d.label}</option>
+  `).join('');
+}
+
+// --- Menu Tab & Category Switcher ---
+function switchWorld(category) {
+  currentWorldCategory = category;
+
+  // Active button state for World Selector
+  const categories = ['all', 'earth-luxury', 'earth-adventure', 'beyond-earth'];
+  categories.forEach(c => {
+    const btn = document.getElementById(`btn-world-${c}`);
+    if (btn) btn.classList.toggle('active', c === category);
+
+    const navItem = document.getElementById(`nav-${c}`);
+    if (navItem) navItem.classList.toggle('active', c === category);
+  });
+
+  // Background Theme Switch
+  const bgOverlay = document.getElementById("bg-overlay");
+  if (bgOverlay) {
+    bgOverlay.className = "hero-bg-overlay";
+    if (category === "beyond-earth") bgOverlay.classList.add("beyond-earth-theme");
+    if (category === "earth-luxury") bgOverlay.classList.add("earth-luxury-theme");
+    if (category === "earth-adventure") bgOverlay.classList.add("earth-adventure-theme");
+  }
+
+  // Update Section Title & Subtitle
+  const secTitle = document.getElementById("expedition-section-title");
+  const secSub = document.getElementById("expedition-section-subtitle");
+  if (secTitle) {
+    secTitle.innerText = category === "all" ? "All Featured Expeditions" 
+      : category === "earth-luxury" ? "Earth Luxuries Expeditions" 
+      : category === "earth-adventure" ? "Earth Adventurous Expeditions"
+      : "Beyond Earth Celestial Expeditions";
+  }
+
+  // Dynamic Dropdown Synchronization!
+  updateDropdownsForCategory(category);
+
+  // Re-render filtered expedition cards
+  renderExpeditionCards();
+  showToast(`Filter set to: ${category.toUpperCase().replace('-', ' ')}`);
+}
+
+// --- Render Expedition Cards ---
+function renderExpeditionCards() {
+  const grid = document.getElementById("expedition-grid");
+  if (!grid) return;
+
+  const filtered = currentWorldCategory === "all" 
+    ? EXPEDITIONS 
+    : EXPEDITIONS.filter(e => e.category === currentWorldCategory);
+
+  grid.innerHTML = filtered.map(exp => `
+    <div class="expedition-card ${exp.isElon ? 'featured' : ''}">
+      <div class="card-image-wrapper">
+        <img src="${exp.image}" class="card-image" alt="${exp.title}">
+        <span class="card-tag ${exp.isElon ? 'elon-special' : exp.category === 'earth-adventure' ? 'adventure-tag' : ''}">${exp.tag}</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${exp.title}</h3>
+        <p class="card-desc">${exp.description}</p>
+        
+        <div class="card-highlights">
+          <div class="highlight-item"><i data-lucide="clock"></i> ${exp.duration}</div>
+          <div class="highlight-item"><i data-lucide="orbit"></i> ${exp.gravity}</div>
+        </div>
+
+        <div class="card-footer">
+          <div class="price-tag">
+            <span class="price-label">Starting From</span>
+            <span class="price-val">${exp.price}</span>
+          </div>
+          <button class="btn-card-action" onclick="loadPreset('${exp.id}')">
+            Load Expedition
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  if (window.lucide) lucide.createIcons();
+}
+
+// --- Dynamic Starfield Canvas Background ---
 function initStarfieldCanvas() {
   const canvas = document.getElementById("starfield-canvas");
   if (!canvas) return;
@@ -211,7 +390,6 @@ function initStarfieldCanvas() {
       ctx.shadowColor = "#00f0ff";
       ctx.fill();
 
-      // Slow downward drift
       star.y += star.speed;
       if (star.y > height) {
         star.y = 0;
@@ -225,8 +403,7 @@ function initStarfieldCanvas() {
   animate();
 }
 
-// --- Orbital Trajectory Simulator (Canvas 2D) ---
-let orbitAnimFrame = null;
+// --- Orbital Trajectory Simulator ---
 let orbitAngle = 0;
 
 function initOrbitSimulatorCanvas() {
@@ -241,10 +418,10 @@ function initOrbitSimulatorCanvas() {
 
     const earthX = 60;
     const earthY = h / 2;
-    const moonX = w - 60;
-    const moonY = h / 2;
+    const destX = w - 60;
+    const destY = h / 2;
 
-    // Draw Earth
+    // Draw Origin Earth
     ctx.beginPath();
     ctx.arc(earthX, earthY, 22, 0, Math.PI * 2);
     ctx.fillStyle = "#00a8ff";
@@ -252,54 +429,50 @@ function initOrbitSimulatorCanvas() {
     ctx.shadowColor = "#00f0ff";
     ctx.fill();
 
-    // Earth Label
     ctx.font = "10px Outfit, sans-serif";
     ctx.fillStyle = "#ffffff";
-    ctx.fillText("EARTH", earthX - 18, earthY + 36);
+    ctx.fillText("SOURCE", earthX - 20, earthY + 36);
 
-    // Draw Moon
+    // Draw Destination
     ctx.beginPath();
-    ctx.arc(moonX, moonY, 14, 0, Math.PI * 2);
-    ctx.fillStyle = "#e0e6ed";
+    ctx.arc(destX, destY, 14, 0, Math.PI * 2);
+    ctx.fillStyle = currentWorldCategory === "beyond-earth" ? "#ff007f" : "#10b981";
     ctx.shadowBlur = 12;
     ctx.shadowColor = "#ffffff";
     ctx.fill();
 
-    // Moon Label
-    ctx.fillText("MOON", moonX - 16, moonY + 28);
+    ctx.fillText("DESTINATION", destX - 30, destY + 28);
 
-    // Hohmann Transfer Curve (Dashed)
+    // Transfer Arc Line
     ctx.beginPath();
     ctx.setLineDash([4, 4]);
     ctx.moveTo(earthX, earthY);
-    ctx.quadraticCurveTo(w / 2, h / 2 - 50 * Math.sin(orbitAngle * 0.5), moonX, moonY);
+    ctx.quadraticCurveTo(w / 2, h / 2 - 50 * Math.sin(orbitAngle * 0.5), destX, destY);
     ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Animated Spacecraft Ship along arc
+    // Animated Transport Craft
     orbitAngle += 0.015 * orbitalSimSpeed;
     if (orbitAngle > Math.PI) orbitAngle = 0;
 
-    const t = orbitAngle / Math.PI; // 0 to 1
-    const shipX = (1 - t) * (1 - t) * earthX + 2 * (1 - t) * t * (w / 2) + t * t * moonX;
-    const shipY = (1 - t) * (1 - t) * earthY + 2 * (1 - t) * t * (h / 2 - 50 * Math.sin(orbitAngle * 0.5)) + t * t * moonY;
+    const t = orbitAngle / Math.PI;
+    const shipX = (1 - t) * (1 - t) * earthX + 2 * (1 - t) * t * (w / 2) + t * t * destX;
+    const shipY = (1 - t) * (1 - t) * earthY + 2 * (1 - t) * t * (h / 2 - 50 * Math.sin(orbitAngle * 0.5)) + t * t * destY;
 
-    // Ship Icon Glow
     ctx.beginPath();
     ctx.arc(shipX, shipY, 5, 0, Math.PI * 2);
-    ctx.fillStyle = "#ff007f";
+    ctx.fillStyle = "#ffd700";
     ctx.shadowBlur = 15;
-    ctx.shadowColor = "#ff007f";
+    ctx.shadowColor = "#ffd700";
     ctx.fill();
 
-    // Trajectory telemetry label
     ctx.fillStyle = "rgba(0, 240, 255, 0.8)";
     ctx.font = "9px monospace";
-    ctx.fillText(`🚀 T+${(t * 72).toFixed(1)}h`, shipX - 15, shipY - 12);
+    ctx.fillText(`TRANSIT ${(t * 100).toFixed(0)}%`, shipX - 20, shipY - 12);
 
-    orbitAnimFrame = requestAnimationFrame(drawOrbit);
+    requestAnimationFrame(drawOrbit);
   }
 
   drawOrbit();
@@ -309,75 +482,12 @@ function toggleOrbitalSpeed() {
   orbitalSimSpeed = orbitalSimSpeed === 1 ? 3 : orbitalSimSpeed === 3 ? 6 : 1;
   const label = document.getElementById("sim-speed-label");
   if (label) {
-    label.innerText = `Velocity: ${(10.8 * orbitalSimSpeed).toFixed(1)} km/s (Hohmann Transfer x${orbitalSimSpeed})`;
+    label.innerText = `Velocity Simulation x${orbitalSimSpeed}`;
   }
-  showToast(`Orbital Simulation Speed set to x${orbitalSimSpeed}`);
+  showToast(`Speed set to x${orbitalSimSpeed}`);
 }
 
-// --- Render Expedition Cards ---
-function renderExpeditionCards() {
-  const grid = document.getElementById("expedition-grid");
-  if (!grid) return;
-
-  const filtered = currentWorldFilter === "all" 
-    ? EXPEDITIONS 
-    : EXPEDITIONS.filter(e => e.category === currentWorldFilter);
-
-  grid.innerHTML = filtered.map(exp => `
-    <div class="expedition-card ${exp.isElon ? 'featured' : ''}">
-      <div class="card-image-wrapper">
-        <img src="${exp.image}" class="card-image" alt="${exp.title}">
-        <span class="card-tag ${exp.isElon ? 'elon-special' : ''}">${exp.tag}</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">${exp.title}</h3>
-        <p class="card-desc">${exp.description}</p>
-        
-        <div class="card-highlights">
-          <div class="highlight-item"><i data-lucide="clock"></i> ${exp.duration}</div>
-          <div class="highlight-item"><i data-lucide="orbit"></i> ${exp.gravity}</div>
-        </div>
-
-        <div class="card-footer">
-          <div class="price-tag">
-            <span class="price-label">Starting From</span>
-            <span class="price-val">${exp.price}</span>
-          </div>
-          <button class="btn-card-action" onclick="loadPreset('${exp.id}')">
-            Load Expedition
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  if (window.lucide) lucide.createIcons();
-}
-
-// --- World Selector Filter Switcher ---
-function switchWorld(world) {
-  currentWorldFilter = world;
-
-  // Active state update
-  const buttons = ['all', 'earth', 'moon', 'mars', 'orbit'];
-  buttons.forEach(b => {
-    const btn = document.getElementById(`btn-world-${b}`);
-    if (btn) btn.classList.toggle('active', b === world);
-  });
-
-  // Background Theme Switch
-  const bgOverlay = document.getElementById("bg-overlay");
-  if (bgOverlay) {
-    bgOverlay.className = "hero-bg-overlay";
-    if (world === "mars") bgOverlay.classList.add("mars-theme");
-    if (world === "moon") bgOverlay.classList.add("lunar-theme");
-  }
-
-  renderExpeditionCards();
-  showToast(`Switched view to ${world.toUpperCase()} Expeditions`);
-}
-
-// --- Render Interactive Itinerary Timeline ---
+// --- Timeline Render & Editing ---
 function renderTimeline() {
   const container = document.getElementById("timeline-container");
   if (!container) return;
@@ -423,7 +533,6 @@ function renderTimeline() {
   updateTelemetryStats();
 }
 
-// --- Dynamic Telemetry Stats Calculator ---
 function updateTelemetryStats() {
   const durationEl = document.getElementById("stat-duration");
   const gravityEl = document.getElementById("stat-gravity");
@@ -433,41 +542,39 @@ function updateTelemetryStats() {
   if (durationEl) durationEl.innerText = `${numDays} Days`;
   if (gravityEl) gravityEl.innerText = currentExpedition.gravity;
 
-  const calculatedPrice = numDays * 65000 + (currentExpedition.category === 'mars' ? 400000 : 80000);
+  const calculatedPrice = numDays * 45000 + (currentExpedition.category === 'beyond-earth' ? 300000 : 50000);
   if (priceEl) priceEl.innerText = `⚡ ${calculatedPrice.toLocaleString()}`;
 }
 
-// --- Itinerary Editing Controls ---
 function removeActivity(dayIdx, actIdx) {
   currentExpedition.days[dayIdx].activities.splice(actIdx, 1);
   renderTimeline();
-  showToast("Activity removed from timeline");
+  showToast("Item removed");
 }
 
 function addActivityPrompt(dayIdx) {
-  const title = prompt("Enter Activity Title (e.g., 'Zero-G Champagne Toast'):", "Lunar Rover Crater Excursion");
+  const title = prompt("Enter Activity Title:", "Private Excursion / Tasting");
   if (!title) return;
-  const desc = prompt("Enter Brief Description:", "Guided tour by Tesla Lunar Rover.");
+  const desc = prompt("Enter Brief Description:", "Guided local experience.");
   
   currentExpedition.days[dayIdx].activities.push({
-    type: "rover",
+    type: "adventure",
     title: title,
-    desc: desc || "Custom astronaut itinerary event."
+    desc: desc || "Custom itinerary event."
   });
 
   renderTimeline();
-  showToast("New activity added to day " + (dayIdx + 1));
+  showToast("Added activity to Day " + (dayIdx + 1));
 }
 
 function updateTripTitle() {
   const input = document.getElementById("trip-title");
   if (input) {
     currentExpedition.title = input.value;
-    showToast("Updated trip name to " + input.value);
+    showToast("Updated trip name");
   }
 }
 
-// --- Load Presets ---
 function loadPreset(presetId) {
   const found = EXPEDITIONS.find(e => e.id === presetId);
   if (found) {
@@ -478,26 +585,17 @@ function loadPreset(presetId) {
   }
 }
 
-function loadElonLunarExpedition() {
-  loadPreset("elon-moon");
-}
-
 function resetToPreset(presetId) {
   loadPreset(presetId);
 }
 
-// --- Navigation & Quick Search ---
 function handleQuickSearch(e) {
   e.preventDefault();
-  const arrival = document.getElementById("arrival-select").value;
-  
-  if (arrival.includes("moon")) switchWorld("moon");
-  else if (arrival.includes("mars")) switchWorld("mars");
-  else if (arrival.includes("orbit")) switchWorld("orbit");
-  else switchWorld("earth");
+  const dep = document.getElementById("departure-select").options[document.getElementById("departure-select").selectedIndex]?.text;
+  const arr = document.getElementById("arrival-select").options[document.getElementById("arrival-select").selectedIndex]?.text;
 
   scrollToPlanner();
-  showToast("Search executed! Custom trajectory generated.");
+  showToast(`Filtered route: ${dep?.split('—')[1] || dep} ➔ ${arr?.split('—')[1] || arr}`);
 }
 
 function scrollToPlanner() {
@@ -505,44 +603,33 @@ function scrollToPlanner() {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
-function scrollToHotels() {
-  switchWorld("moon");
-  const el = document.getElementById("featured");
-  if (el) el.scrollIntoView({ behavior: "smooth" });
-}
-
-// --- Space Suit Selector ---
 function selectSuit(suit) {
   selectedSuit = suit;
   ['obsidian', 'artemis', 'cyber'].forEach(s => {
     const card = document.getElementById(`suit-${s}`);
     if (card) card.classList.toggle('selected', s === suit);
   });
-  showToast(`Space Suit fitted: ${suit.toUpperCase()} Edition`);
+  showToast(`Gear tier updated to ${suit.toUpperCase()}`);
 }
 
-// --- Cosmic Ambient Audio Synthesizer (Web Audio API) ---
 function toggleCosmicAudio() {
   const btn = document.getElementById("btn-audio-toggle");
-  const icon = document.getElementById("audio-icon");
   const text = document.getElementById("audio-text");
 
   if (!isAudioPlaying) {
-    // Start Audio
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       audioContext = new AudioCtx();
 
-      // Deep space drone oscillator
       const osc1 = audioContext.createOscillator();
       const osc2 = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
       osc1.type = "sine";
-      osc1.frequency.setValueAtTime(55, audioContext.currentTime); // Low A
+      osc1.frequency.setValueAtTime(55, audioContext.currentTime);
 
       osc2.type = "triangle";
-      osc2.frequency.setValueAtTime(110, audioContext.currentTime); // A2
+      osc2.frequency.setValueAtTime(110, audioContext.currentTime);
 
       gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
 
@@ -558,12 +645,11 @@ function toggleCosmicAudio() {
 
       if (btn) btn.classList.add("playing");
       if (text) text.innerText = "Cosmic Sound ON";
-      showToast("Cosmic Ambient Synthesizer active 🌌");
+      showToast("Cosmic Sound active 🌌");
     } catch (e) {
-      showToast("Audio Context error");
+      showToast("Audio error");
     }
   } else {
-    // Stop Audio
     if (audioNodes) {
       audioNodes.osc1.stop();
       audioNodes.osc2.stop();
@@ -572,25 +658,26 @@ function toggleCosmicAudio() {
     isAudioPlaying = false;
     if (btn) btn.classList.remove("playing");
     if (text) text.innerText = "Ambient Sound";
-    showToast("Cosmic Ambient sound muted");
+    showToast("Ambient sound muted");
   }
 }
 
-// --- Space Pass Modal Operations ---
 function openSpacePassModal() {
   const modal = document.getElementById("space-pass-modal");
   if (!modal) return;
 
-  // Populate ticket values
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+
   document.getElementById("modal-trip-name").innerText = currentExpedition.title;
-  document.getElementById("modal-suit-tier").innerText = `SUIT: ${selectedSuit.toUpperCase()} VIP`;
-  document.getElementById("modal-passenger-name").innerText = "ELON MUSK / VIP GUEST";
-  document.getElementById("modal-launchpad").innerText = document.getElementById("departure-select").value.toUpperCase();
-  document.getElementById("modal-destination").innerText = currentExpedition.days[currentExpedition.days.length - 1]?.location || "LUNA CITY";
+  document.getElementById("modal-suit-tier").innerText = `GEAR: ${selectedSuit.toUpperCase()} VIP`;
+  document.getElementById("modal-passenger-name").innerText = "VIP EXPLORER";
+  document.getElementById("modal-launchpad").innerText = depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "DEPARTURE HUB";
+  document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";
   document.getElementById("modal-launch-date").innerText = document.getElementById("date-input").value;
   document.getElementById("modal-gravity-val").innerText = currentExpedition.gravity;
   document.getElementById("modal-duration-val").innerText = `${currentExpedition.days.length} DAYS`;
-  document.getElementById("modal-pass-id").innerText = `PASS #AST-${Math.floor(1000 + Math.random() * 9000)}-${currentExpedition.category.toUpperCase()}`;
+  document.getElementById("modal-pass-id").innerText = `PASS #AST-${Math.floor(1000 + Math.random() * 9000)}-PORTAL`;
 
   modal.classList.add("active");
 }
@@ -604,14 +691,13 @@ function printSpacePass() {
   window.print();
 }
 
-// --- Toast Notification System ---
 function showToast(msg) {
   const container = document.getElementById("toast-container");
   if (!container) return;
 
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.innerHTML = `<span style="font-size: 1.2rem;">🚀</span> <span>${msg}</span>`;
+  toast.innerHTML = `<span style="font-size: 1.2rem;">✨</span> <span>${msg}</span>`;
 
   container.appendChild(toast);
 

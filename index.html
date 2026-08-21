@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASTRANAV — World & Interplanetary Travel Itinerary Planner</title>
-  <meta name="description" content="Design luxury itineraries across Earth, Moon Artemis Base, Mars Colonies, and Low Earth Orbit Stations. Featuring Elon Musk's Starship Lunar Expeditions and interactive orbital trajectory planning.">
+  <meta name="description" content="Design luxury itineraries across Earth Luxuries, Earth Adventurous, and Beyond Earth (Moon Artemis Base, Mars Colonies, Low Earth Orbit).">
   <link rel="stylesheet" href="styles.css">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,14 +20,14 @@
     <div class="logo-container">
       <div class="logo-icon">🚀</div>
       <div class="logo-text">ASTRANAV</div>
-      <span class="logo-badge">v3.8 Cosmic</span>
+      <span class="logo-badge">v4.0 Portal</span>
     </div>
     
     <ul class="nav-menu">
-      <li><a class="nav-item active" href="#explore" onclick="switchWorld('all')"><i data-lucide="compass"></i> Explore</a></li>
-      <li><a class="nav-item" href="#planner" onclick="scrollToPlanner()"><i data-lucide="calendar"></i> Itinerary Builder</a></li>
-      <li><a class="nav-item" href="#featured" onclick="loadElonLunarExpedition()"><i data-lucide="zap"></i> Elon's Moon Trip</a></li>
-      <li><a class="nav-item" href="#hotels" onclick="scrollToHotels()"><i data-lucide="building"></i> Space Domes & Hotels</a></li>
+      <li><a class="nav-item active" id="nav-all" onclick="switchWorld('all')"><i data-lucide="compass"></i> All Destinations</a></li>
+      <li><a class="nav-item" id="nav-earth-luxury" onclick="switchWorld('earth-luxury')"><i data-lucide="sparkles"></i> Earth Luxuries</a></li>
+      <li><a class="nav-item" id="nav-earth-adventure" onclick="switchWorld('earth-adventure')"><i data-lucide="mountain"></i> Earth Adventurous</a></li>
+      <li><a class="nav-item" id="nav-beyond-earth" onclick="switchWorld('beyond-earth')"><i data-lucide="rocket"></i> Beyond Earth</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -47,31 +47,28 @@
     <!-- Hero Section -->
     <header class="hero-section">
       <div class="hero-tag">
-        <i data-lucide="sparkles"></i> Next-Gen Interstellar & Terrestrial Travel
+        <i data-lucide="globe"></i> World & Celestial Expedition Engine
       </div>
       <h1 class="hero-title">
-        Plan Your Next Journey Across <span>Earth & The Stars</span>
+        Plan Your Journey Across <span>Earth & The Stars</span>
       </h1>
       <p class="hero-subtitle">
-        Curate luxury itineraries spanning Tokyo and Paris to Lunar Artemis Resorts, Mars Olympus Domes, and Low Earth Orbit Zero-G Luxury Stations.
+        Curate bespoke itineraries across Earth Luxuries, Earth Adventurous sanctuaries, and Beyond Earth celestial habitats.
       </p>
 
-      <!-- World Selector Filters -->
+      <!-- World Selector Filters (4 Core Menus) -->
       <div class="world-selector-container">
         <button class="world-btn active" id="btn-world-all" onclick="switchWorld('all')">
-          <span class="world-icon">🌌</span> All Destinies
+          <span class="world-icon">🌌</span> All Destinations
         </button>
-        <button class="world-btn" id="btn-world-earth" onclick="switchWorld('earth')">
-          <span class="world-icon">🌍</span> Earth Luxury
+        <button class="world-btn" id="btn-world-earth-luxury" onclick="switchWorld('earth-luxury')">
+          <span class="world-icon">✨</span> Earth Luxuries
         </button>
-        <button class="world-btn" id="btn-world-moon" onclick="switchWorld('moon')">
-          <span class="world-icon">🌕</span> Moon Artemis Base
+        <button class="world-btn" id="btn-world-earth-adventure" onclick="switchWorld('earth-adventure')">
+          <span class="world-icon">🧗‍♂️</span> Earth Adventurous
         </button>
-        <button class="world-btn" id="btn-world-mars" onclick="switchWorld('mars')">
-          <span class="world-icon">🪐</span> Mars Canyon Dome
-        </button>
-        <button class="world-btn" id="btn-world-orbit" onclick="switchWorld('orbit')">
-          <span class="world-icon">🛰️</span> Low Earth Orbit
+        <button class="world-btn" id="btn-world-beyond-earth" onclick="switchWorld('beyond-earth')">
+          <span class="world-icon">🚀</span> Beyond Earth
         </button>
       </div>
 
@@ -80,47 +77,48 @@
         <form id="search-form" onsubmit="handleQuickSearch(event)">
           <div class="search-grid">
             <div class="form-group">
-              <label class="form-label"><i data-lucide="map-pin"></i> Departure World / Launchpad</label>
+              <label class="form-label"><i data-lucide="map-pin"></i> Source / Departure Hub</label>
               <select class="form-select" id="departure-select">
-                <option value="earth-cape">Earth — Cape Canaveral Launch Complex 39A</option>
-                <option value="earth-starbase">Earth — Boca Chica Starbase, Texas</option>
-                <option value="earth-tokyo">Earth — Tokyo Haneda International</option>
-                <option value="earth-paris">Earth — Paris Charles de Gaulle</option>
-                <option value="moon-gateway">Moon — Artemis Gateway Orbital Hub</option>
+                <!-- Dynamically populated by JS based on selected menu category -->
               </select>
             </div>
 
             <div class="form-group">
-              <label class="form-label"><i data-lucide="navigation"></i> Arrival Destination</label>
+              <label class="form-label"><i data-lucide="navigation"></i> Arrival / Destination</label>
               <select class="form-select" id="arrival-select">
-                <option value="moon-luna">🌕 Luna City Artemis Base & Grand Hilton</option>
-                <option value="mars-olympus">🪐 Mars Olympus Mons Bio-Dome Resort</option>
-                <option value="orbit-reef">🛰️ Low Earth Orbit Reef Hotel (Zero-G)</option>
-                <option value="earth-kyoto">🌍 Earth — Kyoto Luxury Ryokan & Bamboo Forest</option>
-                <option value="earth-alps">🌍 Earth — Swiss Alps Heli-Ski Lodge</option>
+                <!-- Dynamically populated by JS based on selected menu category -->
               </select>
             </div>
 
             <div class="form-group">
-              <label class="form-label"><i data-lucide="calendar"></i> Departure Window</label>
-              <input type="date" class="form-input" id="date-input" value="2026-10-14">
+              <label class="form-label"><i data-lucide="calendar"></i> Travel Window</label>
+              <input type="date" class="form-input" id="date-input" value="2026-11-01">
             </div>
 
             <div class="form-group">
-              <label class="form-label"><i data-lucide="rocket"></i> Spacecraft Class</label>
+              <label class="form-label"><i data-lucide="plane"></i> Transport Mode</label>
               <select class="form-select" id="vessel-select">
                 <option value="starship">SpaceX Starship Super Heavy Mk-IV</option>
-                <option value="orion">Artemis Deep Space Clipper</option>
-                <option value="luxury-shuttle">Aetheris Executive Zero-G Yacht</option>
-                <option value="supersonic">Earth Supersonic SkyLiner</option>
+                <option value="supersonic">Supersonic SkyLiner Executive Jet</option>
+                <option value="yacht">Luxury Deep-Sea Yacht / Explorer Vessel</option>
+                <option value="heli">Private Heli-Ski Helicopter Shuttle</option>
               </select>
             </div>
 
             <button type="submit" class="btn-search">
-              <i data-lucide="sparkles"></i> Launch Itinerary
+              <i data-lucide="sparkles"></i> Filter & Launch
             </button>
           </div>
         </form>
+
+        <!-- API Integration Recommendation Banner -->
+        <div class="api-info-banner">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i data-lucide="code" style="color: var(--primary-cyan)"></i>
+            <span><strong>Live API Integration Suggestions:</strong> OpenTripMap API / Amadeus API for Earth spots & SpaceX REST API / NASA Open API for real-time space launch telemetry.</span>
+          </div>
+          <span class="api-info-badge">API Ready</span>
+        </div>
       </div>
     </header>
 
@@ -128,8 +126,8 @@
     <section id="featured" class="expeditions-section">
       <div class="section-header">
         <div>
-          <h2 class="section-title">World & Celestial Featured Expeditions</h2>
-          <p class="section-subtitle">Curated iconic itineraries designed by aerospace master planners.</p>
+          <h2 class="section-title" id="expedition-section-title">Featured Expeditions</h2>
+          <p class="section-subtitle" id="expedition-section-subtitle">Hand-crafted travel itineraries filtered by category.</p>
         </div>
       </div>
 
@@ -143,10 +141,10 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">Interactive Expedition Workspace</h2>
-          <p class="section-subtitle">Build, modify, and fine-tune your day-by-day space & terrestrial itinerary.</p>
+          <p class="section-subtitle">Build, modify, and fine-tune your day-by-day itinerary timeline.</p>
         </div>
         <button class="btn-primary" onclick="resetToPreset('elon-moon')">
-          <i data-lucide="rotate-ccw"></i> Load Elon's Moon Trip Preset
+          <i data-lucide="rotate-ccw"></i> Load Featured Preset
         </button>
       </div>
 
@@ -160,7 +158,7 @@
               <input type="text" class="trip-title-input" id="trip-title" value="Elon's 7-Day Starship Lunar Odyssey" onchange="updateTripTitle()">
             </div>
             <div class="trip-badge" id="trip-world-tag">
-              <span style="color: var(--accent-gold); font-weight: 700;">★ ELON'S FEATURED EXPEDITION</span>
+              <span style="color: var(--accent-gold); font-weight: 700;">★ FEATURED EXPEDITION</span>
             </div>
           </div>
 
@@ -174,7 +172,7 @@
           
           <!-- Orbit Trajectory Canvas Widget -->
           <div class="side-widget">
-            <h3 class="widget-title"><i data-lucide="activity"></i> Orbital Trajectory Simulator</h3>
+            <h3 class="widget-title"><i data-lucide="activity"></i> Trajectory & Route Simulator</h3>
             <canvas id="orbit-canvas" width="300" height="180"></canvas>
             <div class="sim-controls">
               <span class="sim-status" id="sim-speed-label">Velocity: 10.8 km/s (Hohmann Transfer)</span>
@@ -198,7 +196,7 @@
               </div>
               <div class="stat-box">
                 <div class="stat-val" id="stat-radiation">Safe (0.04 mSv)</div>
-                <div class="stat-lbl">Radiation Shielding</div>
+                <div class="stat-lbl">Shielding Status</div>
               </div>
               <div class="stat-box">
                 <div class="stat-val" id="stat-price">⚡ 480,000</div>
@@ -207,10 +205,10 @@
             </div>
           </div>
 
-          <!-- Pressurized Space Suit Fitting -->
+          <!-- Pressurized Space / Travel Gear Fitting -->
           <div class="side-widget">
-            <h3 class="widget-title"><i data-lucide="shield"></i> SpaceX Suit Fitting Tier</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Choose custom zero-gravity EVA suit specs:</p>
+            <h3 class="widget-title"><i data-lucide="shield"></i> Gear & Suit Fitting Tier</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Choose custom gear specs for your trip:</p>
             <div class="suit-options">
               <div class="suit-card selected" id="suit-obsidian" onclick="selectSuit('obsidian')">
                 <div class="suit-icon">🌑</div>
@@ -231,10 +229,10 @@
           <div class="side-widget" style="text-align: center; background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,127,0.1));">
             <h3 class="widget-title" style="justify-content: center;"><i data-lucide="award"></i> Ready for Departure?</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-              Generate your official Interstellar Flight Pass with QR boarding verification.
+              Generate your official Travel & Flight Pass with QR verification.
             </p>
             <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="openSpacePassModal()">
-              <i data-lucide="ticket"></i> Issue Space Flight Pass
+              <i data-lucide="ticket"></i> Issue Flight Pass
             </button>
           </div>
 
@@ -251,7 +249,7 @@
       <button class="btn-close-modal" onclick="closeSpacePassModal()"><i data-lucide="x"></i></button>
       
       <div style="text-align: center; margin-bottom: 1rem;">
-        <span class="logo-badge">OFFICIAL INTERSTELLAR BOARDING CREDENTIAL</span>
+        <span class="logo-badge">OFFICIAL BOARDING CREDENTIAL</span>
         <h2 style="font-family: var(--font-heading); font-size: 2rem; margin-top: 0.5rem;" id="modal-trip-name">
           Elon's 7-Day Starship Lunar Odyssey
         </h2>
@@ -260,46 +258,45 @@
       <div class="ticket-container" id="ticket-printable">
         <div class="ticket-main-section">
           <div class="ticket-header">
-            <div class="ticket-brand">ASTRANAV — SPACEX STARSHIP</div>
-            <span class="ticket-class" id="modal-suit-tier">SUIT: OBSIDIAN EVA VIP</span>
+            <div class="ticket-brand">ASTRANAV — CELESTIAL & TERRESTRIAL</div>
+            <span class="ticket-class" id="modal-suit-tier">GEAR: OBSIDIAN EVA VIP</span>
           </div>
 
           <div class="ticket-grid">
             <div class="ticket-field">
               <span class="tf-label">PASSENGER NAME</span>
-              <span class="tf-val" id="modal-passenger-name">ELON MUSK / EXPLORER</span>
+              <span class="tf-val" id="modal-passenger-name">VIP EXPLORER</span>
             </div>
             <div class="ticket-field">
-              <span class="tf-label">LAUNCH COMPLEX</span>
+              <span class="tf-label">DEPARTURE SOURCE</span>
               <span class="tf-val" id="modal-launchpad">BOCA CHICA STARBASE 39A</span>
             </div>
             <div class="ticket-field">
-              <span class="tf-label">DESTINATION HABITAT</span>
+              <span class="tf-label">ARRIVING DESTINATION</span>
               <span class="tf-val" id="modal-destination">LUNA CITY HILTON RESORT</span>
             </div>
             <div class="ticket-field">
-              <span class="tf-label">LAUNCH DATE</span>
-              <span class="tf-val" id="modal-launch-date">OCT 14, 2026</span>
+              <span class="tf-label">TRAVEL DATE</span>
+              <span class="tf-val" id="modal-launch-date">NOV 01, 2026</span>
             </div>
             <div class="ticket-field">
-              <span class="tf-label">GRAVITY LEVEL</span>
-              <span class="tf-val" id="modal-gravity-val">0.16 g (LUNAR)</span>
+              <span class="tf-label">GRAVITY PROFILE</span>
+              <span class="tf-val" id="modal-gravity-val">0.16 g</span>
             </div>
             <div class="ticket-field">
-              <span class="tf-label">FLIGHT CREW DURATION</span>
-              <span class="tf-val" id="modal-duration-val">7 DAYS / 6 NIGHTS</span>
+              <span class="tf-label">DURATION</span>
+              <span class="tf-val" id="modal-duration-val">7 DAYS</span>
             </div>
           </div>
         </div>
 
         <div class="ticket-stub">
           <div class="qr-code-placeholder">
-            <!-- Simulated QR Code SVG -->
             <svg viewBox="0 0 100 100" width="100" height="100">
               <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v10 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
             </svg>
           </div>
-          <span class="ticket-seq" id="modal-pass-id">PASS #AST-9021-MOON</span>
+          <span class="ticket-seq" id="modal-pass-id">PASS #AST-9021-CELESTIAL</span>
         </div>
       </div>
 
@@ -322,13 +319,13 @@
       </div>
       <p>The World's Best Terrestrial & Interplanetary Travel Itinerary Engine.</p>
       <ul class="footer-links">
-        <li><a href="#" onclick="switchWorld('all')">All Expeditions</a></li>
-        <li><a href="#" onclick="switchWorld('moon')">Elon's Lunar Gateway</a></li>
-        <li><a href="#" onclick="switchWorld('mars')">Mars Canyon Resorts</a></li>
-        <li><a href="#" onclick="switchWorld('orbit')">Low Earth Orbit Reef</a></li>
+        <li><a href="#" onclick="switchWorld('all')">All Destinations</a></li>
+        <li><a href="#" onclick="switchWorld('earth-luxury')">Earth Luxuries</a></li>
+        <li><a href="#" onclick="switchWorld('earth-adventure')">Earth Adventurous</a></li>
+        <li><a href="#" onclick="switchWorld('beyond-earth')">Beyond Earth</a></li>
       </ul>
       <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-dim);">
-        &copy; 2026 ASTRANAV Interstellar Systems. Powered by SpaceX Starship Orbital Architecture.
+        &copy; 2026 ASTRANAV Systems. Built for G2Heaven Portal.
       </p>
     </div>
   </footer>
