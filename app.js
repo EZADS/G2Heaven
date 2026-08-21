@@ -1,7 +1,7 @@
 /* ASTRANAV - Interplanetary & Terrestrial Itinerary Engine Logic */
 
-// --- Default Configurable Webhook URL ---
-let DEFAULT_WEBHOOK_URL = "https://hook.us1.make.com/astranav-travel-itinerary";
+// --- Backend Configured Webhook URL ---
+const WEBHOOK_URL = "https://hook.us1.make.com/astranav-travel-itinerary";
 
 // --- Category Datasets for Dynamic Dropdowns ---
 const CATEGORY_DROPDOWN_DATA = {
@@ -263,6 +263,7 @@ let selectedSuit = "obsidian";
 let currentWorldCategory = "all";
 let orbitalSimSpeed = 1;
 let selectedPackageDays = 7;
+let selectedPaxCount = 1;
 let isAudioPlaying = false;
 let audioContext = null;
 let audioNodes = null;
@@ -272,49 +273,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initStarfieldCanvas();
   initOrbitSimulatorCanvas();
   populatePackageDropdown();
+  populatePaxDropdown();
   updateDropdownsForCategory("all");
   renderExpeditionCards();
   renderTimeline();
   updateTelemetryStats();
-  initWebhookConfig();
 });
-
-// --- Webhook URL Management ---
-function getWebhookUrl() {
-  return localStorage.getItem("ASTRANAV_WEBHOOK_URL") || DEFAULT_WEBHOOK_URL;
-}
-
-function saveWebhookUrl(url) {
-  if (url) {
-    localStorage.setItem("ASTRANAV_WEBHOOK_URL", url.trim());
-    showToast("Webhook URL saved!");
-  }
-}
-
-function initWebhookConfig() {
-  const input = document.getElementById("webhook-url-input");
-  if (input) input.value = getWebhookUrl();
-}
-
-function openWebhookModal() {
-  const modal = document.getElementById("webhook-modal");
-  const input = document.getElementById("webhook-url-input");
-  if (input) input.value = getWebhookUrl();
-  if (modal) modal.classList.add("active");
-}
-
-function closeWebhookModal() {
-  const modal = document.getElementById("webhook-modal");
-  if (modal) modal.classList.remove("active");
-}
-
-function saveWebhookSettings() {
-  const input = document.getElementById("webhook-url-input");
-  if (input && input.value) {
-    saveWebhookUrl(input.value);
-    closeWebhookModal();
-  }
-}
 
 // --- Populate Package Dropdown Options (1 to 100 Days) ---
 function populatePackageDropdown() {
@@ -326,6 +290,18 @@ function populatePackageDropdown() {
       ${days} ${days === 1 ? 'Day Package' : 'Days Package'}
     </option>
   `).join('');
+}
+
+// --- Populate Number of PAX Dropdown Options (Numeric 1 to 100) ---
+function populatePaxDropdown() {
+  const paxSelect = document.getElementById("pax-select");
+  if (!paxSelect) return;
+
+  let optionsHtml = "";
+  for (let i = 1; i <= 100; i++) {
+    optionsHtml += `<option value="${i}" ${i === selectedPaxCount ? 'selected' : ''}>${i}</option>`;
+  }
+  paxSelect.innerHTML = optionsHtml;
 }
 
 // --- Package Duration Change Handler ---
@@ -461,30 +437,32 @@ async function handleQuickSearch(e) {
   const arrSelect = document.getElementById("arrival-select");
   const vesselSelect = document.getElementById("vessel-select");
   const pkgSelect = document.getElementById("package-select");
+  const paxSelect = document.getElementById("pax-select");
   const dateInput = document.getElementById("date-input");
   const btnSubmit = document.getElementById("btn-submit-search");
+
+  const paxValue = paxSelect ? parseInt(paxSelect.value, 10) : 1;
 
   const payload = {
     source: depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "",
     arrival: arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "",
     packageDays: pkgSelect ? parseInt(pkgSelect.value, 10) : 7,
+    pax: paxValue,
     travelDate: dateInput ? dateInput.value : "2026-11-01",
     transportMode: vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "",
     category: currentWorldCategory
   };
 
-  const webhookUrl = getWebhookUrl();
   scrollToPlanner();
 
-  // Show visual loader
   if (btnSubmit) {
     btnSubmit.innerHTML = `<i data-lucide="loader-2" class="spin"></i> Dispatching Webhook...`;
     btnSubmit.disabled = true;
   }
-  showToast(`Dispatching Webhook request to endpoint... 🔗`);
+  showToast(`Dispatching Webhook request (${payload.pax} PAX, ${payload.packageDays} Days)... 🔗`);
 
   try {
-    const response = await fetch(webhookUrl, {
+    const response = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -497,18 +475,16 @@ async function handleQuickSearch(e) {
       if (data && data.days) {
         currentExpedition = data;
       } else {
-        // Dynamic fallback update based on webhook parameters
         updateExpeditionFromPayload(payload);
       }
-      showToast("Webhook response received! Custom itinerary updated. ✨");
+      showToast("Webhook response received! Itinerary updated. ✨");
     } else {
       updateExpeditionFromPayload(payload);
-      showToast(`Webhook HTTP ${response.status} — Applied local dynamic itinerary!`);
+      showToast(`Webhook HTTP ${response.status} — Applied dynamic route!`);
     }
   } catch (err) {
-    // If webhook endpoint is offline or CORS blocked, perform dynamic local timeline generation
     updateExpeditionFromPayload(payload);
-    showToast("Dispatched Webhook payload! Applied dynamic route timeline.");
+    showToast(`Dispatched Webhook (${payload.pax} PAX)! Applied dynamic timeline.`);
   } finally {
     if (btnSubmit) {
       btnSubmit.innerHTML = `<i data-lucide="sparkles"></i> Filter & Launch`;
@@ -524,14 +500,14 @@ function updateExpeditionFromPayload(payload) {
   const depClean = payload.source.split("—")[1] || payload.source.split(" ")[0];
   const arrClean = payload.arrival.split("—")[1] || payload.arrival;
 
-  currentExpedition.title = `${payload.packageDays}-Day ${arrClean.trim()} Expedition`;
+  currentExpedition.title = `${payload.packageDays}-Day ${arrClean.trim()} Expedition (${payload.pax} PAX)`;
   currentExpedition.category = payload.category;
   currentExpedition.duration = `${payload.packageDays} Days`;
   currentExpedition.days = [];
 
   for (let i = 1; i <= payload.packageDays; i++) {
     let loc = i === 1 ? depClean.trim() : i === payload.packageDays ? arrClean.trim() : `${arrClean.trim()} En-Route Stop ${i}`;
-    let actTitle = i === 1 ? `Departure via ${payload.transportMode.split(' ')[1] || 'Transport'}` 
+    let actTitle = i === 1 ? `Departure via ${payload.transportMode.split(' ')[1] || 'Transport'} (${payload.pax} Passengers)` 
       : i === payload.packageDays ? `Arrival at ${arrClean.trim()}`
       : `Day ${i} ${payload.category.toUpperCase()} Highlight`;
 
@@ -542,7 +518,7 @@ function updateExpeditionFromPayload(payload) {
         {
           type: payload.category === 'beyond-earth' ? 'spaceflight' : 'adventure',
           title: actTitle,
-          desc: `Custom itinerary scheduled for ${payload.travelDate}.`
+          desc: `Custom itinerary scheduled for ${payload.travelDate} for ${payload.pax} PAX.`
         }
       ]
     });
@@ -776,10 +752,13 @@ function updateTelemetryStats() {
   const priceEl = document.getElementById("stat-price");
 
   const numDays = currentExpedition.days.length;
+  const paxSelect = document.getElementById("pax-select");
+  const paxCount = paxSelect ? parseInt(paxSelect.value, 10) : selectedPaxCount;
+
   if (durationEl) durationEl.innerText = `${numDays} Days`;
   if (gravityEl) gravityEl.innerText = currentExpedition.gravity;
 
-  const calculatedPrice = numDays * 45000 + (currentExpedition.category === 'beyond-earth' ? 300000 : 50000);
+  const calculatedPrice = (numDays * 45000 + (currentExpedition.category === 'beyond-earth' ? 300000 : 50000)) * paxCount;
   if (priceEl) priceEl.innerText = `⚡ ${calculatedPrice.toLocaleString()}`;
 }
 
@@ -902,10 +881,13 @@ function openSpacePassModal() {
   const arrSelect = document.getElementById("arrival-select");
   const vesselSelect = document.getElementById("vessel-select");
   const pkgSelect = document.getElementById("package-select");
+  const paxSelect = document.getElementById("pax-select");
+
+  const paxCount = paxSelect ? paxSelect.value : selectedPaxCount;
 
   document.getElementById("modal-trip-name").innerText = currentExpedition.title;
   document.getElementById("modal-suit-tier").innerText = `MODE: ${vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "VESSEL"}`;
-  document.getElementById("modal-passenger-name").innerText = "VIP EXPLORER";
+  document.getElementById("modal-passenger-name").innerText = `${paxCount} PAX (VIP EXPLORER)`;
   document.getElementById("modal-launchpad").innerText = depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "DEPARTURE HUB";
   document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";
   document.getElementById("modal-launch-date").innerText = document.getElementById("date-input").value;

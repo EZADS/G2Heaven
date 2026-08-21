@@ -20,7 +20,7 @@
     <div class="logo-container">
       <div class="logo-icon">🚀</div>
       <div class="logo-text">ASTRANAV</div>
-      <span class="logo-badge">v5.0 Webhook AI</span>
+      <span class="logo-badge">v5.2 PAX & Backend</span>
     </div>
     
     <ul class="nav-menu">
@@ -31,10 +31,6 @@
     </ul>
 
     <div class="nav-actions">
-      <button class="btn-audio" id="btn-webhook-modal" onclick="openWebhookModal()">
-        <i data-lucide="link"></i>
-        <span>Webhook URL</span>
-      </button>
       <button class="btn-audio" id="btn-audio-toggle" onclick="toggleCosmicAudio()">
         <i data-lucide="volume-x" id="audio-icon"></i>
         <span id="audio-text">Ambient Sound</span>
@@ -79,7 +75,7 @@
       <!-- Quick Search & Launch Bar -->
       <div class="search-panel">
         <form id="search-form" onsubmit="handleQuickSearch(event)">
-          <div class="search-grid">
+          <div class="search-grid" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));">
             <div class="form-group">
               <label class="form-label"><i data-lucide="map-pin"></i> Source / Departure Hub</label>
               <select class="form-select" id="departure-select" onchange="handleLocationChange()">
@@ -102,6 +98,13 @@
             </div>
 
             <div class="form-group">
+              <label class="form-label"><i data-lucide="users"></i> Number of PAX</label>
+              <select class="form-select" id="pax-select">
+                <!-- Dynamically generated 1 to 100 numeric values by JS -->
+              </select>
+            </div>
+
+            <div class="form-group">
               <label class="form-label"><i data-lucide="calendar"></i> Travel Date</label>
               <input type="date" class="form-input" id="date-input" value="2026-11-01">
             </div>
@@ -113,7 +116,7 @@
               </select>
             </div>
 
-            <button type="submit" class="btn-search" id="btn-submit-search" style="grid-column: span 1;">
+            <button type="submit" class="btn-search" id="btn-submit-search" style="grid-column: span 1; height: 48px; margin-top: 1rem;">
               <i data-lucide="sparkles"></i> Filter & Launch
             </button>
           </div>
@@ -123,9 +126,9 @@
         <div class="api-info-banner">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <i data-lucide="webhook" style="color: var(--primary-cyan)"></i>
-            <span><strong>Webhook Automation Mode:</strong> Clicking 'Filter & Launch' sends a JSON POST request containing all 5 parameters to your Webhook URL.</span>
+            <span><strong>Backend Webhook Mode:</strong> Clicking 'Filter & Launch' sends a JSON POST payload (source, arrival, packageDays, pax, travelDate, transportMode) to your backend Webhook URL.</span>
           </div>
-          <span class="api-info-badge" id="webhook-status-badge">Webhook Ready</span>
+          <span class="api-info-badge">Backend Ready</span>
         </div>
       </div>
     </header>
@@ -251,33 +254,6 @@
 
   </main>
 
-  <!-- Webhook Configuration Modal -->
-  <div class="modal-overlay" id="webhook-modal">
-    <div class="space-pass-modal" style="max-width: 600px;">
-      <button class="btn-close-modal" onclick="closeWebhookModal()"><i data-lucide="x"></i></button>
-      
-      <div style="text-align: center; margin-bottom: 1.5rem;">
-        <div class="logo-badge" style="margin-bottom: 0.5rem;">AUTOMATION INTEGRATION</div>
-        <h2 style="font-family: var(--font-heading); font-size: 1.8rem;">
-          🔗 Webhook URL Configuration
-        </h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
-          Enter the Webhook URL (Make.com, n8n, Zapier, or API endpoint) to trigger upon clicking <strong>Filter & Launch</strong>.
-        </p>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 1.5rem;">
-        <label class="form-label"><i data-lucide="link"></i> Webhook POST Endpoint URL</label>
-        <input type="url" class="form-input" id="webhook-url-input" placeholder="https://hook.us1.make.com/your-webhook-id or https://n8n.example.com/webhook/..." style="font-family: var(--font-mono); font-size: 0.85rem;">
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-card-action" onclick="closeWebhookModal()">Cancel</button>
-        <button class="btn-primary" onclick="saveWebhookSettings()"><i data-lucide="check"></i> Save Webhook URL</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Space Flight Pass Modal -->
   <div class="modal-overlay" id="space-pass-modal">
     <div class="space-pass-modal">
@@ -299,8 +275,8 @@
 
           <div class="ticket-grid">
             <div class="ticket-field">
-              <span class="tf-label">PASSENGER NAME</span>
-              <span class="tf-val" id="modal-passenger-name">VIP EXPLORER</span>
+              <span class="tf-label">PASSENGER / PAX</span>
+              <span class="tf-val" id="modal-passenger-name">1 PAX (VIP EXPLORER)</span>
             </div>
             <div class="ticket-field">
               <span class="tf-label">DEPARTURE SOURCE</span>
