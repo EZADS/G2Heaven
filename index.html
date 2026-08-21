@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTRANAV — World & Interplanetary Travel Itinerary Planner</title>
+  <title>astranav Beyond-Universe — World & Interplanetary Travel Itinerary Planner</title>
   <meta name="description" content="Design luxury itineraries across Earth Luxuries, Earth Adventurous, and Beyond Earth (Moon Artemis Base, Mars Colonies, Low Earth Orbit).">
   <link rel="stylesheet" href="styles.css">
   <!-- Lucide Icons -->
@@ -19,8 +19,11 @@
   <nav class="navbar">
     <div class="logo-container">
       <div class="logo-icon">🚀</div>
-      <div class="logo-text">ASTRANAV</div>
-      <span class="logo-badge">v5.2 PAX & Backend</span>
+      <div class="logo-brand-wrapper">
+        <span class="logo-prefix">astranav</span>
+        <div class="logo-text">Beyond-Universe</div>
+      </div>
+      <span class="logo-badge">v6.0 Portal</span>
     </div>
     
     <ul class="nav-menu">
@@ -126,9 +129,9 @@
         <div class="api-info-banner">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <i data-lucide="webhook" style="color: var(--primary-cyan)"></i>
-            <span><strong>Backend Webhook Mode:</strong> Clicking 'Filter & Launch' sends a JSON POST payload (source, arrival, packageDays, pax, travelDate, transportMode) to your backend Webhook URL.</span>
+            <span><strong>Backend Webhook Engine:</strong> Clicking 'Filter & Launch' fires your n8n Webhook URL to generate & populate the <em>Interactive Expedition Workspace</em> below.</span>
           </div>
-          <span class="api-info-badge">Backend Ready</span>
+          <span class="api-info-badge">n8n Connected</span>
         </div>
       </div>
     </header>
@@ -147,12 +150,12 @@
       </div>
     </section>
 
-    <!-- Interactive Itinerary Builder Workspace -->
+    <!-- Interactive Expedition Workspace -->
     <section id="planner" class="planner-section">
       <div class="section-header">
         <div>
           <h2 class="section-title">Interactive Expedition Workspace</h2>
-          <p class="section-subtitle">Build, modify, and fine-tune your day-by-day itinerary timeline.</p>
+          <p class="section-subtitle">Dynamically generated day-by-day itinerary timeline populated from Webhook responses.</p>
         </div>
         <button class="btn-primary" onclick="resetToPreset('elon-moon')">
           <i data-lucide="rotate-ccw"></i> Load Featured Preset
@@ -174,7 +177,7 @@
           </div>
 
           <div class="timeline-container" id="timeline-container">
-            <!-- Rendered by JS app.js -->
+            <!-- Rendered dynamically by Webhook or presets in app.js -->
           </div>
         </div>
 
@@ -269,7 +272,7 @@
       <div class="ticket-container" id="ticket-printable">
         <div class="ticket-main-section">
           <div class="ticket-header">
-            <div class="ticket-brand">ASTRANAV — CELESTIAL & TERRESTRIAL</div>
+            <div class="ticket-brand">astranav Beyond-Universe</div>
             <span class="ticket-class" id="modal-suit-tier">GEAR: OBSIDIAN EVA VIP</span>
           </div>
 
@@ -326,7 +329,10 @@
     <div class="container">
       <div class="logo-container" style="justify-content: center; margin-bottom: 1rem;">
         <div class="logo-icon">🚀</div>
-        <div class="logo-text">ASTRANAV</div>
+        <div class="logo-brand-wrapper" style="text-align: left;">
+          <span class="logo-prefix">astranav</span>
+          <div class="logo-text">Beyond-Universe</div>
+        </div>
       </div>
       <p>The World's Best Terrestrial & Interplanetary Travel Itinerary Engine.</p>
       <ul class="footer-links">
@@ -336,7 +342,7 @@
         <li><a href="#" onclick="switchWorld('beyond-earth')">Beyond Earth</a></li>
       </ul>
       <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-dim);">
-        &copy; 2026 ASTRANAV Systems. Built for G2Heaven Portal.
+        &copy; 2026 astranav Beyond-Universe Systems. Built for G2Heaven Portal.
       </p>
     </div>
   </footer>
