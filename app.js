@@ -490,8 +490,34 @@ async function handleQuickSearch(e) {
     }
     renderTimeline();
     enablePdfDownloadButton();
+    showItineraryReadyPrompt("YOUR ITINERARY IS READY FOR INTERACTION");
   }
 }
+
+function showItineraryReadyPrompt(msg) {
+  const existing = document.querySelector(".itinerary-ready-prompt");
+  if (existing) existing.remove();
+
+  const promptDiv = document.createElement("div");
+  promptDiv.className = "itinerary-ready-prompt";
+  promptDiv.innerHTML = `
+    <span>🚀</span>
+    <span>${msg || "YOUR ITINERARY IS READY FOR INTERACTION"}</span>
+    <button onclick="this.parentElement.remove()" style="background: none; border: none; color: #ffffff; font-size: 1.2rem; cursor: pointer; margin-left: 1rem; opacity: 0.8;">✕</button>
+  `;
+
+  document.body.appendChild(promptDiv);
+
+  setTimeout(() => {
+    if (promptDiv && promptDiv.parentElement) {
+      promptDiv.style.opacity = "0";
+      promptDiv.style.transform = "translate(-50%, -20px)";
+      promptDiv.style.transition = "all 0.4s ease";
+      setTimeout(() => promptDiv.remove(), 400);
+    }
+  }, 6000);
+}
+
 
 function enablePdfDownloadButton() {
   const btn = document.getElementById("btn-download-pdf");
