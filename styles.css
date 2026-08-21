@@ -152,23 +152,36 @@ html, body {
 }
 
 .logo-prefix {
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 700;
   letter-spacing: 2px;
   text-transform: lowercase;
   color: var(--primary-cyan);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .logo-text {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   background: linear-gradient(90deg, #ffffff, var(--primary-cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.logo-suffix {
+  align-self: flex-end;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  opacity: 0.95;
+  margin-top: -2px;
+}
+
 
 .logo-badge {
   font-size: 0.65rem;
