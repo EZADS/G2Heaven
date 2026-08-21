@@ -472,18 +472,15 @@ async function handleQuickSearch(e) {
 
     if (response.ok) {
       const responseData = await response.json();
-      renderRawWebhookResponseDisplay(responseData, "200 OK — Payload Received");
       parseAndRenderWebhookResponse(responseData, payload);
       showToast("n8n Webhook response received! Interactive Workspace populated. ✨");
     } else {
       updateExpeditionFromPayload(payload);
-      renderRawWebhookResponseDisplay({ status: response.status, statusText: response.statusText, payload: payload }, `HTTP ${response.status}`);
       showToast(`Webhook HTTP ${response.status} — Applied dynamic workspace route!`);
     }
   } catch (err) {
     console.warn("Webhook fetch notice:", err);
     updateExpeditionFromPayload(payload);
-    renderRawWebhookResponseDisplay({ status: "Dispatched", webhookUrl: WEBHOOK_URL, payload: payload, note: "Dispatched payload to n8n Webhook endpoint" }, "Dispatched Webhook Payload");
     showToast(`Dispatched Webhook (${payload.pax} PAX)! Applied dynamic workspace timeline.`);
   } finally {
     if (btnSubmit) {
@@ -495,20 +492,6 @@ async function handleQuickSearch(e) {
     enablePdfDownloadButton();
     showItineraryReadyPrompt("YOUR ITINERARY IS READY FOR INTERACTION");
   }
-}
-
-function renderRawWebhookResponseDisplay(data, statusText) {
-  const panel = document.getElementById("webhook-response-panel");
-  const pre = document.getElementById("webhook-response-json");
-  const badge = document.getElementById("webhook-status-badge");
-
-  if (!panel || !pre) return;
-
-  pre.textContent = typeof data === "object" ? JSON.stringify(data, null, 2) : String(data);
-  if (badge) badge.textContent = statusText || "200 OK — Data Received";
-  
-  panel.style.display = "block";
-  if (window.lucide) lucide.createIcons();
 }
 
 
