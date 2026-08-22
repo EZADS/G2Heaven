@@ -1120,6 +1120,43 @@ function userLogout() {
   showToast("Logged out successfully.");
 }
 
+// --- Space Pass Modal Engine ---
+function openSpacePassModal() {
+  const modal = document.getElementById("space-pass-modal");
+  if (!modal) return;
+
+  const depSelect = document.getElementById("departure-select");
+  const arrSelect = document.getElementById("arrival-select");
+  const vesselSelect = document.getElementById("vessel-select");
+  const pkgSelect = document.getElementById("package-select");
+  const paxSelect = document.getElementById("pax-select");
+
+  const paxCount = paxSelect ? paxSelect.value : selectedPaxCount;
+
+  document.getElementById("modal-trip-name").innerText = currentExpedition.title;
+  document.getElementById("modal-suit-tier").innerText = `MODE: ${vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "VESSEL"}`;
+  document.getElementById("modal-passenger-name").innerText = `${paxCount} PAX (VIP EXPLORER)`;
+  document.getElementById("modal-launchpad").innerText = depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "DEPARTURE HUB";
+  document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";
+  document.getElementById("modal-launch-date").innerText = document.getElementById("date-input").value;
+  document.getElementById("modal-gravity-val").innerText = currentExpedition.gravity;
+  document.getElementById("modal-duration-val").innerText = `${pkgSelect ? pkgSelect.value : currentExpedition.days.length} DAYS PACKAGE`;
+  document.getElementById("modal-pass-id").innerText = `PASS #AST-${Math.floor(1000 + Math.random() * 9000)}-PORTAL`;
+
+  modal.classList.add("active");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeSpacePassModal() {
+  const modal = document.getElementById("space-pass-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function printSpacePass() {
+  window.print();
+}
+
+
 
 function showToast(msg) {
   const container = document.getElementById("toast-container");
