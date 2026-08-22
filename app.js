@@ -1062,6 +1062,13 @@ async function handleSignInSubmit(e) {
   const passwordInput = document.getElementById("signin-password");
 
   const email = emailInput ? emailInput.value.trim() : "";
+  const password = passwordInput ? passwordInput.value : "";
+
+  if (!email || !password) {
+    showToast("⚠️ Email ID and Password are required to Sign In!");
+    return;
+  }
+
   const name = email ? email.split("@")[0] : "Explorer";
 
   currentUser = { name: name, email: email, isLoggedIn: true };
@@ -1073,22 +1080,30 @@ async function handleSignInSubmit(e) {
   showToast(`Welcome back, ${name}! 🚀`);
   showItineraryReadyPrompt(`WELCOME BACK, ${name.toUpperCase()}!`);
 
-  // Dispatches login payload to n8n Webhook
+  const loginPayload = {
+    action: "user_login",
+    userEmail: email,
+    password: password,
+    timestamp: new Date().toISOString()
+  };
+
+  // Dispatches login payload to n8n Webhook (https://rams1942.app.n8n.cloud/webhook/user-registration)
   try {
-    await fetch(WEBHOOK_URL, {
+    fetch("https://rams1942.app.n8n.cloud/webhook/user-registration", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "user_login",
-        userEmail: email,
-        userName: name,
-        timestamp: new Date().toISOString()
-      })
+      body: JSON.stringify(loginPayload)
+    }).then(res => {
+      console.log("n8n Log In Webhook response status:", res.status);
+      showToast(`Log In Webhook fired (Email & Password sent)! 📡`);
+    }).catch(err => {
+      console.warn("Sign in webhook sync notice:", err);
     });
   } catch (err) {
     console.warn("Sign in webhook sync notice:", err);
   }
 }
+
 
 function updateSignInButton() {
   const btn = document.getElementById("btn-sign-in");
