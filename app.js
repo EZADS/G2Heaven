@@ -1170,7 +1170,7 @@ function closeSpaceStatsModal() {
 }
 
 // --- Sign Up Module & Webhook Trigger Engine ---
-let SIGNUP_WEBHOOK_URL = "https://rams1942.app.n8n.cloud/webhook/travel-itinerary";
+const SIGNUP_WEBHOOK_URL = "https://rams1942.app.n8n.cloud/webhook/user-registration";
 
 function openSignUpModal() {
   const modal = document.getElementById("sign-up-modal");
@@ -1191,19 +1191,48 @@ async function handleSignUpSubmit(e) {
   const emailInput = document.getElementById("signup-email");
   const mobileInput = document.getElementById("signup-mobile");
 
-  const username = usernameInput ? usernameInput.value.trim() : "Explorer";
+  const username = usernameInput ? usernameInput.value.trim() : "";
   const email = emailInput ? emailInput.value.trim() : "";
   const mobile = mobileInput ? mobileInput.value.trim() : "";
 
+  // 1. Mandatory Fields Validation
+  if (!username || !email || !mobile) {
+    showToast("⚠️ All 3 fields (User Name, Email ID, Mobile Number) are mandatory!");
+    return;
+  }
+
+  // 2. Name Length Validation
+  if (username.length < 2) {
+    showToast("⚠️ Please enter a valid User Name (at least 2 characters).");
+    if (usernameInput) usernameInput.focus();
+    return;
+  }
+
+  // 3. Email Format Validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showToast("⚠️ Please enter a valid Email ID (e.g. explorer@domain.com).");
+    if (emailInput) emailInput.focus();
+    return;
+  }
+
+  // 4. Mobile Number Format Validation (7 to 15 digits)
+  const mobileDigits = mobile.replace(/\D/g, "");
+  if (mobileDigits.length < 7 || mobileDigits.length > 15) {
+    showToast("⚠️ Please enter a valid Mobile Number (7 to 15 digits).");
+    if (mobileInput) mobileInput.focus();
+    return;
+  }
+
   const signupPayload = {
-    action: "user_signup",
+    action: "user_registration",
     username: username,
     userEmail: email,
     userMobile: mobile,
     timestamp: new Date().toISOString()
   };
 
-  showToast(`Submitting registration for ${username}... 🚀`);
+  showToast(`Registering ${username}... 🚀`);
 
   currentUser = { name: username, email: email, mobile: mobile, isLoggedIn: true };
   localStorage.setItem("astranav_user", JSON.stringify(currentUser));
@@ -1214,19 +1243,22 @@ async function handleSignUpSubmit(e) {
   showToast(`Sign Up Successful! Welcome, ${username}! 🚀✨`);
   showItineraryReadyPrompt(`WELCOME TO BEYOND-UNIVERSE, ${username.toUpperCase()}!`);
 
-  // Dispatches signup payload to n8n Webhook
+  // Dispatches signup payload to n8n Webhook (https://rams1942.app.n8n.cloud/webhook/user-registration)
   try {
-    const res = await fetch(SIGNUP_WEBHOOK_URL, {
+    fetch(SIGNUP_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signupPayload)
+    }).then(() => {
+      showToast(`User Registration Webhook fired successfully! 📡`);
+    }).catch(err => {
+      console.warn("User Registration Webhook notice:", err);
     });
-    showToast(`Sign Up Webhook dispatched successfully! 📡`);
   } catch (err) {
-    console.warn("Sign Up Webhook notice:", err);
-    showToast(`Sign Up registered! (Webhook dispatched)`);
+    console.warn("User Registration Webhook notice:", err);
   }
 }
+
 
 
 
