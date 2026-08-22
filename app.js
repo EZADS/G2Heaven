@@ -1190,14 +1190,16 @@ async function handleSignUpSubmit(e) {
   const usernameInput = document.getElementById("signup-username");
   const emailInput = document.getElementById("signup-email");
   const mobileInput = document.getElementById("signup-mobile");
+  const passwordInput = document.getElementById("signup-password");
 
   const username = usernameInput ? usernameInput.value.trim() : "";
   const email = emailInput ? emailInput.value.trim() : "";
   const mobile = mobileInput ? mobileInput.value.trim() : "";
+  const password = passwordInput ? passwordInput.value : "";
 
   // 1. Mandatory Fields Validation
-  if (!username || !email || !mobile) {
-    showToast("⚠️ All 3 fields (User Name, Email ID, Mobile Number) are mandatory!");
+  if (!username || !email || !mobile || !password) {
+    showToast("⚠️ All 4 fields (User Name, Email ID, Mobile Number, Password) are mandatory!");
     return;
   }
 
@@ -1224,15 +1226,24 @@ async function handleSignUpSubmit(e) {
     return;
   }
 
+  // 5. Password Format Validation (at least 6 characters)
+  if (password.length < 6) {
+    showToast("⚠️ Password must be at least 6 characters long.");
+    if (passwordInput) passwordInput.focus();
+    return;
+  }
+
   const signupPayload = {
     action: "user_registration",
     username: username,
     userEmail: email,
     userMobile: mobile,
+    password: password,
     timestamp: new Date().toISOString()
   };
 
   showToast(`Registering ${username}... 🚀`);
+
 
   currentUser = { name: username, email: email, mobile: mobile, isLoggedIn: true };
   localStorage.setItem("astranav_user", JSON.stringify(currentUser));
