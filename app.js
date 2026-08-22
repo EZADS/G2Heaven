@@ -1233,6 +1233,7 @@ async function handleSignUpSubmit(e) {
     return;
   }
 
+  // 5 Explicit Details Payload for n8n Webhook
   const signupPayload = {
     action: "user_registration",
     username: username,
@@ -1244,7 +1245,6 @@ async function handleSignUpSubmit(e) {
 
   showToast(`Registering ${username}... 🚀`);
 
-
   currentUser = { name: username, email: email, mobile: mobile, isLoggedIn: true };
   localStorage.setItem("astranav_user", JSON.stringify(currentUser));
 
@@ -1254,20 +1254,22 @@ async function handleSignUpSubmit(e) {
   showToast(`Sign Up Successful! Welcome, ${username}! 🚀✨`);
   showItineraryReadyPrompt(`WELCOME TO BEYOND-UNIVERSE, ${username.toUpperCase()}!`);
 
-  // Dispatches signup payload to n8n Webhook (https://rams1942.app.n8n.cloud/webhook/user-registration)
+  // Dispatches 5 details payload asynchronously to n8n Webhook (https://rams1942.app.n8n.cloud/webhook/user-registration)
   try {
     fetch(SIGNUP_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signupPayload)
-    }).then(() => {
-      showToast(`User Registration Webhook fired successfully! 📡`);
+    }).then(response => {
+      console.log("n8n Webhook response status:", response.status);
+      showToast(`n8n Webhook fired (5 details sent)! 📡`);
     }).catch(err => {
       console.warn("User Registration Webhook notice:", err);
     });
   } catch (err) {
     console.warn("User Registration Webhook notice:", err);
   }
+
 }
 
 
