@@ -1107,25 +1107,49 @@ async function handleSignInSubmit(e) {
 
 
 function updateSignInButton() {
-  const btn = document.getElementById("btn-sign-in");
-  if (!btn) return;
+  const btnSignIn = document.getElementById("btn-sign-in");
+  const btnSignUp = document.getElementById("btn-sign-up");
 
   if (currentUser && currentUser.isLoggedIn) {
-    btn.innerHTML = `<i data-lucide="user"></i> Hello, ${currentUser.name}!`;
-    btn.style.background = "rgba(16, 185, 129, 0.2)";
-    btn.style.borderColor = "var(--accent-emerald)";
-    btn.style.color = "var(--accent-emerald)";
-    btn.onclick = () => {
-      if (confirm(`Logged in as ${currentUser.email}.\n\nClick OK to Log Out.`)) {
-        userLogout();
-      }
-    };
+    if (btnSignIn) {
+      btnSignIn.innerHTML = `<i data-lucide="user"></i> Hello, ${currentUser.name}!`;
+      btnSignIn.style.background = "rgba(16, 185, 129, 0.2)";
+      btnSignIn.style.borderColor = "var(--accent-emerald)";
+      btnSignIn.style.color = "var(--accent-emerald)";
+      btnSignIn.onclick = () => {
+        if (confirm(`Logged in as ${currentUser.email}.\n\nClick OK to Log Out.`)) {
+          userLogout();
+        }
+      };
+    }
+
+    // Disable Sign Up button when user is logged in successfully
+    if (btnSignUp) {
+      btnSignUp.disabled = true;
+      btnSignUp.style.opacity = "0.4";
+      btnSignUp.style.cursor = "not-allowed";
+      btnSignUp.style.pointerEvents = "none";
+      btnSignUp.title = `Already logged in as ${currentUser.email}`;
+    }
   } else {
-    btn.innerHTML = `<i data-lucide="log-in"></i> Sign In`;
-    btn.style.background = "linear-gradient(135deg, var(--primary-cyan), #00a8ff)";
-    btn.style.color = "#030712";
-    btn.onclick = openSignInModal;
+    if (btnSignIn) {
+      btnSignIn.innerHTML = `<i data-lucide="log-in"></i> Sign In`;
+      btnSignIn.style.background = "linear-gradient(135deg, var(--primary-cyan), #00a8ff)";
+      btnSignIn.style.borderColor = "transparent";
+      btnSignIn.style.color = "#030712";
+      btnSignIn.onclick = openSignInModal;
+    }
+
+    // Enable Sign Up button when user logs out
+    if (btnSignUp) {
+      btnSignUp.disabled = false;
+      btnSignUp.style.opacity = "1";
+      btnSignUp.style.cursor = "pointer";
+      btnSignUp.style.pointerEvents = "auto";
+      btnSignUp.title = "Register new account";
+    }
   }
+
   if (window.lucide) lucide.createIcons();
 }
 
@@ -1135,6 +1159,7 @@ function userLogout() {
   updateSignInButton();
   showToast("Logged out successfully.");
 }
+
 
 // --- Space Pass Modal Engine ---
 function openSpacePassModal() {
