@@ -250,14 +250,17 @@
             </div>
           </div>
 
-          <!-- Generate Space Pass Trigger (Original Location below Gear & Suit Fitting Tier) -->
+          <!-- Pass Generator & Space Stats Trigger Widget -->
           <div class="side-widget" style="text-align: center; background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,127,0.1));">
             <h3 class="widget-title" style="justify-content: center;"><i data-lucide="award"></i> Ready for Departure?</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-              Generate your official Travel & Flight Pass with QR verification.
+              Generate your official Travel & Air-Craft Pass with QR verification or view space passenger statistics.
             </p>
             <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="openSpacePassModal()">
-              <i data-lucide="ticket"></i> Issue Flight Pass
+              <i data-lucide="ticket"></i> Issue Air-Craft Pass
+            </button>
+            <button class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.6rem; background: rgba(0, 240, 255, 0.15); border: 1px solid var(--primary-cyan); color: var(--primary-cyan);" onclick="openSpaceStatsModal()">
+              <i data-lucide="bar-chart-2"></i> Space Travellers Stats
             </button>
           </div>
 
@@ -361,6 +364,75 @@
       <div class="modal-actions">
         <button class="btn-card-action" onclick="closeSpacePassModal()">Close</button>
         <button class="btn-primary" onclick="printSpacePass()"><i data-lucide="printer"></i> Print / Save Ticket Pass</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Space Travellers Statistics Modal -->
+  <div class="modal-overlay" id="space-stats-modal">
+    <div class="space-pass-modal" style="max-width: 680px; padding: 2.2rem;">
+      <button class="btn-close-modal" onclick="closeSpaceStatsModal()"><i data-lucide="x"></i></button>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="logo-icon" style="margin: 0 auto 0.8rem; width: 48px; height: 48px; font-size: 1.6rem;">📊</div>
+        <span class="logo-badge">CELESTIAL DEMOGRAPHICS & TELEMETRY</span>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-top: 0.5rem;">
+          Space Travellers Statistics
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Real-time astronaut passenger analytics across Earth & Interplanetary habitats.
+        </p>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="stat-box" style="padding: 1.2rem; background: rgba(0, 240, 255, 0.05); border: 1px solid var(--primary-cyan);">
+          <div class="stat-val" style="font-size: 1.8rem;">12,840+</div>
+          <div class="stat-lbl" style="font-size: 0.85rem; font-weight: 700; color: #fff;">Total Space Travellers</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Certified Commercial & Scientific Explorers</div>
+        </div>
+
+        <div class="stat-box" style="padding: 1.2rem; background: rgba(255, 0, 127, 0.05); border: 1px solid var(--primary-magenta);">
+          <div class="stat-val" style="font-size: 1.8rem; color: var(--primary-magenta);">3,420</div>
+          <div class="stat-lbl" style="font-size: 0.85rem; font-weight: 700; color: #fff;">Lunar Base Citizens</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Artemis City & Hilton Lunar Resort Residents</div>
+        </div>
+
+        <div class="stat-box" style="padding: 1.2rem; background: rgba(255, 215, 0, 0.05); border: 1px solid var(--accent-gold);">
+          <div class="stat-val" style="font-size: 1.8rem; color: var(--accent-gold);">1,890</div>
+          <div class="stat-lbl" style="font-size: 0.85rem; font-weight: 700; color: #fff;">Martian Colonists</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Valles Marineris Aurora Canyon Habitat</div>
+        </div>
+
+        <div class="stat-box" style="padding: 1.2rem; background: rgba(16, 185, 129, 0.05); border: 1px solid var(--accent-emerald);">
+          <div class="stat-val" style="font-size: 1.8rem; color: var(--accent-emerald);">7,530</div>
+          <div class="stat-lbl" style="font-size: 0.85rem; font-weight: 700; color: #fff;">LEO Orbital Passengers</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Low Earth Orbit Zero-G Luxury Cruisers</div>
+        </div>
+      </div>
+
+      <!-- Fleet & Safety Summary -->
+      <div style="background: rgba(5, 7, 15, 0.6); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border); margin-bottom: 1.5rem;">
+        <h4 style="font-family: var(--font-heading); color: var(--primary-cyan); margin-bottom: 0.8rem; font-size: 1rem;">
+          🚀 Fleet Operational Metrics
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; text-align: center;">
+          <div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: #fff;">42 Vessels</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Active Starships & Supersonic Fleet</div>
+          </div>
+          <div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent-emerald);">100% Safety</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Zero Transit Casualties</div>
+          </div>
+          <div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent-gold);">98.4% On-Time</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Hohmann Window Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <button class="btn-card-action" onclick="closeSpaceStatsModal()" style="padding: 0.6rem 1.5rem;">Close Stats</button>
       </div>
     </div>
   </div>

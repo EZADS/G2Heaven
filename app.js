@@ -1156,6 +1156,20 @@ function printSpacePass() {
   window.print();
 }
 
+// --- Space Travellers Stats Module ---
+function openSpaceStatsModal() {
+  const modal = document.getElementById("space-stats-modal");
+  if (!modal) return;
+  modal.classList.add("active");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeSpaceStatsModal() {
+  const modal = document.getElementById("space-stats-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+
 
 
 function showToast(msg) {
