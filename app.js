@@ -1070,16 +1070,6 @@ async function handleSignInSubmit(e) {
   }
 
   const name = email ? email.split("@")[0] : "Explorer";
-
-  currentUser = { name: name, email: email, isLoggedIn: true };
-  localStorage.setItem("astranav_user", JSON.stringify(currentUser));
-
-  updateSignInButton();
-  closeSignInModal();
-
-  showToast(`Welcome back, ${name}! 🚀`);
-  showItineraryReadyPrompt(`WELCOME BACK, ${name.toUpperCase()}!`);
-
   const loginPayload = {
     action: "user_login",
     userEmail: email,
@@ -1087,22 +1077,61 @@ async function handleSignInSubmit(e) {
     timestamp: new Date().toISOString()
   };
 
-  // Dispatches login payload to n8n Webhook (https://rams1942.app.n8n.cloud/webhook/user-login)
+  showToast(`Authenticating credentials with n8n Webhook... 📡`);
+
   try {
-    fetch("https://rams1942.app.n8n.cloud/webhook/user-login", {
+    const response = await fetch("https://rams1942.app.n8n.cloud/webhook/user-login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(loginPayload)
-    }).then(res => {
-      console.log("n8n Log In Webhook response status:", res.status);
-      showToast(`Log In Webhook fired to user-login! 📡`);
-    }).catch(err => {
-      console.warn("Sign in webhook sync notice:", err);
     });
+
+    let resData = null;
+    try {
+      resData = await response.json();
+    } catch(e) {
+      resData = { status: response.ok ? "success" : "error" };
+    }
+
+    // Check if Webhook response indicates invalid username or password
+    const isFailure = response.status >= 400 || (
+      resData && typeof resData === 'object' && (
+        resData.success === false ||
+        resData.status === "error" ||
+        resData.status === "invalid" ||
+        resData.error ||
+        (resData.message && (
+          resData.message.toLowerCase().includes("invalid") ||
+          resData.message.toLowerCase().includes("fail") ||
+          resData.message.toLowerCase().includes("wrong")
+        ))
+      )
+    );
+
+    if (isFailure) {
+      const errorMsg = (resData && (resData.message || resData.error)) 
+        ? (resData.message || resData.error) 
+        : "Invalid Username or Password";
+      showToast(`⚠️ Sign In Failed: ${errorMsg}`);
+      return; // Stop execution: Do NOT sign in on invalid credentials
+    }
+
+    // Webhook returned successful sign in response!
+    currentUser = { name: name, email: email, isLoggedIn: true };
+    localStorage.setItem("astranav_user", JSON.stringify(currentUser));
+
+    updateSignInButton();
+    closeSignInModal();
+
+    showToast(`Sign In Successful! Welcome back, ${name}! 🚀✨`);
+    showItineraryReadyPrompt(`WELCOME BACK, ${name.toUpperCase()}!`);
+
   } catch (err) {
-    console.warn("Sign in webhook sync notice:", err);
+    console.warn("Sign In Webhook Error:", err);
+    showToast(`⚠️ Sign In Failed: Unable to connect to n8n Webhook.`);
   }
 }
+
 
 
 
