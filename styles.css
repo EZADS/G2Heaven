@@ -66,35 +66,56 @@ html, body {
   width: 100vw;
   height: 100vh;
   background: 
-    linear-gradient(180deg, rgba(5, 7, 15, 0.6) 0%, rgba(5, 7, 15, 0.85) 60%, rgba(5, 7, 15, 0.98) 100%),
-    url('assets/hero_earth_to_moon.jpg') center/cover no-repeat;
+    linear-gradient(180deg, rgba(5, 7, 15, 0.45) 0%, rgba(5, 7, 15, 0.75) 60%, rgba(5, 7, 15, 0.98) 100%),
+    url('assets/ramakannan_moon.jpg') center right/cover no-repeat;
   z-index: -1;
-  opacity: 0.55;
-  filter: saturate(1.2) contrast(1.1);
+  opacity: 0.75;
+  filter: saturate(1.1) contrast(1.15);
   transition: opacity 0.8s ease, filter 0.8s ease;
 }
 
 .hero-bg-overlay.beyond-earth-theme {
   background: 
-    linear-gradient(180deg, rgba(15, 5, 15, 0.6) 0%, rgba(5, 7, 15, 0.85) 60%, rgba(5, 7, 15, 0.98) 100%),
-    url('assets/mars_resort.jpg') center/cover no-repeat;
-  opacity: 0.6;
+    linear-gradient(180deg, rgba(15, 5, 15, 0.5) 0%, rgba(5, 7, 15, 0.8) 60%, rgba(5, 7, 15, 0.98) 100%),
+    url('assets/ramakannan_moon.jpg') center right/cover no-repeat;
+  opacity: 0.8;
 }
 
 .hero-bg-overlay.earth-luxury-theme {
   background: 
-    linear-gradient(180deg, rgba(5, 15, 20, 0.6) 0%, rgba(5, 7, 15, 0.85) 60%, rgba(5, 7, 15, 0.98) 100%),
-    url('assets/lunar_hotel.jpg') center/cover no-repeat;
-  opacity: 0.55;
+    linear-gradient(180deg, rgba(5, 15, 20, 0.5) 0%, rgba(5, 7, 15, 0.8) 60%, rgba(5, 7, 15, 0.98) 100%),
+    url('assets/ramakannan_moon.jpg') center right/cover no-repeat;
+  opacity: 0.75;
 }
 
 .hero-bg-overlay.earth-adventure-theme {
   background: 
-    linear-gradient(180deg, rgba(5, 20, 15, 0.6) 0%, rgba(5, 7, 15, 0.85) 60%, rgba(5, 7, 15, 0.98) 100%),
-    url('assets/hero_earth_to_moon.jpg') center/cover no-repeat;
-  opacity: 0.5;
-  filter: saturate(1.4) hue-rotate(40deg);
+    linear-gradient(180deg, rgba(5, 20, 15, 0.5) 0%, rgba(5, 7, 15, 0.8) 60%, rgba(5, 7, 15, 0.98) 100%),
+    url('assets/ramakannan_moon.jpg') center right/cover no-repeat;
+  opacity: 0.7;
 }
+
+/* Photo Credit Watermark Badge */
+.photo-credit-badge {
+  position: fixed;
+  bottom: 1.2rem;
+  left: 1.5rem;
+  z-index: 100;
+  background: rgba(5, 7, 15, 0.85);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(12px);
+  letter-spacing: 0.5px;
+}
+
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
