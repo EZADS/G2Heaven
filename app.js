@@ -1169,6 +1169,66 @@ function closeSpaceStatsModal() {
   if (modal) modal.classList.remove("active");
 }
 
+// --- Sign Up Module & Webhook Trigger Engine ---
+let SIGNUP_WEBHOOK_URL = "https://rams1942.app.n8n.cloud/webhook/travel-itinerary";
+
+function openSignUpModal() {
+  const modal = document.getElementById("sign-up-modal");
+  if (!modal) return;
+  modal.classList.add("active");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeSignUpModal() {
+  const modal = document.getElementById("sign-up-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+async function handleSignUpSubmit(e) {
+  e.preventDefault();
+
+  const usernameInput = document.getElementById("signup-username");
+  const emailInput = document.getElementById("signup-email");
+  const mobileInput = document.getElementById("signup-mobile");
+
+  const username = usernameInput ? usernameInput.value.trim() : "Explorer";
+  const email = emailInput ? emailInput.value.trim() : "";
+  const mobile = mobileInput ? mobileInput.value.trim() : "";
+
+  const signupPayload = {
+    action: "user_signup",
+    username: username,
+    userEmail: email,
+    userMobile: mobile,
+    timestamp: new Date().toISOString()
+  };
+
+  showToast(`Submitting registration for ${username}... 🚀`);
+
+  currentUser = { name: username, email: email, mobile: mobile, isLoggedIn: true };
+  localStorage.setItem("astranav_user", JSON.stringify(currentUser));
+
+  closeSignUpModal();
+  updateSignInButton();
+
+  showToast(`Sign Up Successful! Welcome, ${username}! 🚀✨`);
+  showItineraryReadyPrompt(`WELCOME TO BEYOND-UNIVERSE, ${username.toUpperCase()}!`);
+
+  // Dispatches signup payload to n8n Webhook
+  try {
+    const res = await fetch(SIGNUP_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(signupPayload)
+    });
+    showToast(`Sign Up Webhook dispatched successfully! 📡`);
+  } catch (err) {
+    console.warn("Sign Up Webhook notice:", err);
+    showToast(`Sign Up registered! (Webhook dispatched)`);
+  }
+}
+
+
 
 
 

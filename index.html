@@ -44,7 +44,11 @@
       <button class="btn-primary" id="btn-sign-in" onclick="openSignInModal()">
         <i data-lucide="log-in"></i> Sign In
       </button>
+      <button class="btn-auth-highlight" id="btn-sign-up" onclick="openSignUpModal()">
+        <i data-lucide="user-plus"></i> Sign Up
+      </button>
     </div>
+
   </nav>
 
   <!-- Main Container -->
@@ -306,8 +310,47 @@
     </div>
   </div>
 
+  <!-- Sign Up Modal Prompt -->
+  <div class="modal-overlay" id="sign-up-modal">
+
+    <div class="space-pass-modal" style="max-width: 460px; padding: 2.2rem;">
+      <button class="btn-close-modal" onclick="closeSignUpModal()"><i data-lucide="x"></i></button>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="logo-icon" style="margin: 0 auto 0.8rem; width: 48px; height: 48px; font-size: 1.6rem;">🚀</div>
+        <span class="logo-badge">NEW EXPLORER REGISTRATION</span>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-top: 0.5rem;">
+          Sign Up
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Register details to trigger n8n Webhook & unlock expeditions
+        </p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <form id="sign-up-form" onsubmit="handleSignUpSubmit(event)">
+        <div class="form-group" style="margin-bottom: 1.1rem;">
+          <label class="form-label"><i data-lucide="user"></i> User Name</label>
+          <input type="text" class="form-input" id="signup-username" required placeholder="e.g. Captain Ramakannan">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.1rem;">
+          <label class="form-label"><i data-lucide="mail"></i> User Email ID</label>
+          <input type="email" class="form-input" id="signup-email" required placeholder="ram@beyond-universe.com">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.8rem;">
+          <label class="form-label"><i data-lucide="phone"></i> User Mobile Number</label>
+          <input type="tel" class="form-input" id="signup-mobile" required placeholder="+1 (555) 019-2834">
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 1rem; background: linear-gradient(135deg, var(--accent-purple), var(--primary-cyan));">
+          <i data-lucide="user-plus"></i> Sign Up
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Space Flight Pass Modal -->
   <div class="modal-overlay" id="space-pass-modal">
+
     <div class="space-pass-modal">
       <button class="btn-close-modal" onclick="closeSpacePassModal()"><i data-lucide="x"></i></button>
       
