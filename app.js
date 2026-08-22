@@ -278,7 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderExpeditionCards();
   renderTimeline();
   updateTelemetryStats();
+  checkUserLoginState();
 });
+
 
 // --- Populate Package Dropdown Options (1 to 100 Days) ---
 function populatePackageDropdown() {
@@ -1028,39 +1030,96 @@ function toggleCosmicAudio() {
   }
 }
 
-function openSpacePassModal() {
-  const modal = document.getElementById("space-pass-modal");
-  if (!modal) return;
+// --- Sign In Module ---
+let currentUser = null;
 
-  const depSelect = document.getElementById("departure-select");
-  const arrSelect = document.getElementById("arrival-select");
-  const vesselSelect = document.getElementById("vessel-select");
-  const pkgSelect = document.getElementById("package-select");
-  const paxSelect = document.getElementById("pax-select");
-
-  const paxCount = paxSelect ? paxSelect.value : selectedPaxCount;
-
-  document.getElementById("modal-trip-name").innerText = currentExpedition.title;
-  document.getElementById("modal-suit-tier").innerText = `MODE: ${vesselSelect ? vesselSelect.options[vesselSelect.selectedIndex]?.text : "VESSEL"}`;
-  document.getElementById("modal-passenger-name").innerText = `${paxCount} PAX (VIP EXPLORER)`;
-  document.getElementById("modal-launchpad").innerText = depSelect ? depSelect.options[depSelect.selectedIndex]?.text : "DEPARTURE HUB";
-  document.getElementById("modal-destination").innerText = arrSelect ? arrSelect.options[arrSelect.selectedIndex]?.text : "DESTINATION";
-  document.getElementById("modal-launch-date").innerText = document.getElementById("date-input").value;
-  document.getElementById("modal-gravity-val").innerText = currentExpedition.gravity;
-  document.getElementById("modal-duration-val").innerText = `${pkgSelect ? pkgSelect.value : currentExpedition.days.length} DAYS PACKAGE`;
-  document.getElementById("modal-pass-id").innerText = `PASS #AST-${Math.floor(1000 + Math.random() * 9000)}-PORTAL`;
-
-  modal.classList.add("active");
+function checkUserLoginState() {
+  const saved = localStorage.getItem("astranav_user");
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      updateSignInButton();
+    } catch(e) {}
+  }
 }
 
-function closeSpacePassModal() {
-  const modal = document.getElementById("space-pass-modal");
+function openSignInModal() {
+  const modal = document.getElementById("sign-in-modal");
+  if (!modal) return;
+  modal.classList.add("active");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeSignInModal() {
+  const modal = document.getElementById("sign-in-modal");
   if (modal) modal.classList.remove("active");
 }
 
-function printSpacePass() {
-  window.print();
+async function handleSignInSubmit(e) {
+  e.preventDefault();
+  
+  const emailInput = document.getElementById("signin-email");
+  const passwordInput = document.getElementById("signin-password");
+
+  const email = emailInput ? emailInput.value.trim() : "";
+  const name = email ? email.split("@")[0] : "Explorer";
+
+  currentUser = { name: name, email: email, isLoggedIn: true };
+  localStorage.setItem("astranav_user", JSON.stringify(currentUser));
+
+  updateSignInButton();
+  closeSignInModal();
+
+  showToast(`Welcome back, ${name}! 🚀`);
+  showItineraryReadyPrompt(`WELCOME BACK, ${name.toUpperCase()}!`);
+
+  // Dispatches login payload to n8n Webhook
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "user_login",
+        userEmail: email,
+        userName: name,
+        timestamp: new Date().toISOString()
+      })
+    });
+  } catch (err) {
+    console.warn("Sign in webhook sync notice:", err);
+  }
 }
+
+function updateSignInButton() {
+  const btn = document.getElementById("btn-sign-in");
+  if (!btn) return;
+
+  if (currentUser && currentUser.isLoggedIn) {
+    btn.innerHTML = `<i data-lucide="user"></i> Hello, ${currentUser.name}!`;
+    btn.style.background = "rgba(16, 185, 129, 0.2)";
+    btn.style.borderColor = "var(--accent-emerald)";
+    btn.style.color = "var(--accent-emerald)";
+    btn.onclick = () => {
+      if (confirm(`Logged in as ${currentUser.email}.\n\nClick OK to Log Out.`)) {
+        userLogout();
+      }
+    };
+  } else {
+    btn.innerHTML = `<i data-lucide="log-in"></i> Sign In`;
+    btn.style.background = "linear-gradient(135deg, var(--primary-cyan), #00a8ff)";
+    btn.style.color = "#030712";
+    btn.onclick = openSignInModal;
+  }
+  if (window.lucide) lucide.createIcons();
+}
+
+function userLogout() {
+  currentUser = null;
+  localStorage.removeItem("astranav_user");
+  updateSignInButton();
+  showToast("Logged out successfully.");
+}
+
 
 function showToast(msg) {
   const container = document.getElementById("toast-container");

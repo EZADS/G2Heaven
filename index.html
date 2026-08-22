@@ -26,7 +26,7 @@
         <div class="logo-text">BEYOND-UNIVERSE</div>
         <span class="logo-suffix">Travel Planner</span>
       </div>
-      <span class="logo-badge">v7.2 Connected</span>
+      <span class="logo-badge">v8.5 Sign In</span>
     </div>
     
     <ul class="nav-menu">
@@ -41,8 +41,8 @@
         <i data-lucide="volume-x" id="audio-icon"></i>
         <span id="audio-text">Ambient Sound</span>
       </button>
-      <button class="btn-primary" onclick="openSpacePassModal()">
-        <i data-lucide="ticket"></i> Pass Generator
+      <button class="btn-primary" id="btn-sign-in" onclick="openSignInModal()">
+        <i data-lucide="log-in"></i> Sign In
       </button>
     </div>
   </nav>
@@ -250,14 +250,14 @@
             </div>
           </div>
 
-          <!-- Generate Space Pass Trigger -->
+          <!-- Sign In Callout Trigger -->
           <div class="side-widget" style="text-align: center; background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,127,0.1));">
-            <h3 class="widget-title" style="justify-content: center;"><i data-lucide="award"></i> Ready for Departure?</h3>
+            <h3 class="widget-title" style="justify-content: center;"><i data-lucide="user-check"></i> Sign In to Save Trips</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-              Generate your official Travel & Flight Pass with QR verification.
+              Log in with your Email ID to save & sync your custom itineraries.
             </p>
-            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="openSpacePassModal()">
-              <i data-lucide="ticket"></i> Issue Flight Pass
+            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="openSignInModal()">
+              <i data-lucide="log-in"></i> Sign In Now
             </button>
           </div>
 
@@ -268,67 +268,36 @@
 
   </main>
 
-  <!-- Space Flight Pass Modal -->
-  <div class="modal-overlay" id="space-pass-modal">
-    <div class="space-pass-modal">
-      <button class="btn-close-modal" onclick="closeSpacePassModal()"><i data-lucide="x"></i></button>
-      
-      <div style="text-align: center; margin-bottom: 1rem;">
-        <span class="logo-badge">OFFICIAL BOARDING CREDENTIAL</span>
-        <h2 style="font-family: var(--font-heading); font-size: 2rem; margin-top: 0.5rem;" id="modal-trip-name">
-          Elon's 7-Day Starship Lunar Odyssey
+  <!-- Sign In Modal Prompt -->
+  <div class="modal-overlay" id="sign-in-modal">
+    <div class="space-pass-modal" style="max-width: 440px; padding: 2.2rem;">
+      <button class="btn-close-modal" onclick="closeSignInModal()"><i data-lucide="x"></i></button>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="logo-icon" style="margin: 0 auto 0.8rem; width: 48px; height: 48px; font-size: 1.6rem;">🚀</div>
+        <span class="logo-badge">EXPLORER AUTHENTICATION</span>
+        <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-top: 0.5rem;">
+          Sign In
         </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Enter your Email ID and Password to sign in
+        </p>
       </div>
 
-      <div class="ticket-container" id="ticket-printable">
-        <div class="ticket-main-section">
-          <div class="ticket-header">
-            <div class="ticket-brand">astranav BEYOND-UNIVERSE Travel Planner</div>
-            <span class="ticket-class" id="modal-suit-tier">GEAR: OBSIDIAN EVA VIP</span>
-          </div>
-
-          <div class="ticket-grid">
-            <div class="ticket-field">
-              <span class="tf-label">PASSENGER / PAX</span>
-              <span class="tf-val" id="modal-passenger-name">1 PAX (VIP EXPLORER)</span>
-            </div>
-            <div class="ticket-field">
-              <span class="tf-label">SOURCE / DEPARTURE</span>
-              <span class="tf-val" id="modal-launchpad">BOCA CHICA STARBASE 39A</span>
-            </div>
-            <div class="ticket-field">
-              <span class="tf-label">DESTINATION / ARRIVAL</span>
-              <span class="tf-val" id="modal-destination">LUNA CITY HILTON RESORT</span>
-            </div>
-            <div class="ticket-field">
-              <span class="tf-label">TRAVEL DATE</span>
-              <span class="tf-val" id="modal-launch-date">NOV 01, 2026</span>
-            </div>
-            <div class="ticket-field">
-              <span class="tf-label">GRAVITY PROFILE</span>
-              <span class="tf-val" id="modal-gravity-val">0.16 g</span>
-            </div>
-            <div class="ticket-field">
-              <span class="tf-label">SELECTED PACKAGE</span>
-              <span class="tf-val" id="modal-duration-val">7 DAYS</span>
-            </div>
-          </div>
+      <!-- Sign In Form -->
+      <form id="sign-in-form" onsubmit="handleSignInSubmit(event)">
+        <div class="form-group" style="margin-bottom: 1.2rem;">
+          <label class="form-label"><i data-lucide="mail"></i> Email ID (User ID)</label>
+          <input type="email" class="form-input" id="signin-email" required placeholder="explorer@beyond-universe.com">
         </div>
-
-        <div class="ticket-stub">
-          <div class="qr-code-placeholder">
-            <svg viewBox="0 0 100 100" width="100" height="100">
-              <path d="M0,0 h30 v30 h-30 z M10,10 h10 v10 h-10 z M70,0 h30 v30 h-30 z M80,10 h10 v10 h-10 z M0,70 h30 v30 h-30 z M10,80 h10 v10 h-10 z M40,10 h20 v10 h-20 z M40,40 h20 v20 h-20 z M70,70 h20 v20 h-20 z M10,40 h10 v20 h-10 z M70,40 h10 v10 h-10 z" fill="#000" />
-            </svg>
-          </div>
-          <span class="ticket-seq" id="modal-pass-id">PASS #AST-9021-CELESTIAL</span>
+        <div class="form-group" style="margin-bottom: 1.8rem;">
+          <label class="form-label"><i data-lucide="lock"></i> Password</label>
+          <input type="password" class="form-input" id="signin-password" required placeholder="••••••••">
         </div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-card-action" onclick="closeSpacePassModal()">Close</button>
-        <button class="btn-primary" onclick="printSpacePass()"><i data-lucide="printer"></i> Print / Save Ticket Pass</button>
-      </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 1rem;">
+          <i data-lucide="log-in"></i> Log In
+        </button>
+      </form>
     </div>
   </div>
 
